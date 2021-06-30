@@ -14,13 +14,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Board {
@@ -46,5 +45,15 @@ public class Board {
 	
 	@Column(name = "upload_time")
 	private LocalDateTime uploadTime;
+	
+	@Builder
+	public Board (Long authorId, Long recommedCount, Long viewsCount, String title, String content) {
+		this.authorId = authorId;
+		this.recommendCount = recommedCount;
+		this.viewsCount = viewsCount;
+		this.title = title;
+		this.content = content;
+		this.uploadTime = LocalDateTime.now();
+	}
 	
 }
