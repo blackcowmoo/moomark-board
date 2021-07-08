@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.moomark.board.domain.Tag;
+import com.moomark.board.domain.TagDto;
 import com.moomark.board.repository.TagRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,20 @@ public class TagService {
 		var tag = Tag.builder()
 				.information(information)
 				.build();
+		
+		log.info("Add information : {}", information);
 		return	tagRepository.save(tag).getId();
+	}
+	
+	public void deleteTag(Long id) {
+		tagRepository.deleteById(id);
+	}
+	
+	public TagDto findTagById(Long id) {
+		var tag = tagRepository.findById(id).orElseThrow();
+		return TagDto.builder()
+				.id(tag.getId())
+				.information(tag.getInformation())
+				.build();
 	}
 }
