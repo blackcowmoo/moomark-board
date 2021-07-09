@@ -3,6 +3,7 @@ package com.moomark.board.controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,8 +24,8 @@ public class BoardController {
 		return boardService.getBoardInfoById(boardId);
 	}
 	
-	@PutMapping("/board/new")
-	public Long putBoardInfo(BoardDto boardDto) {
+	@PostMapping("/board/new")
+	public Long saveBoardInfo(BoardDto boardDto) {
 		return boardService.saveBoard(boardDto);
 	}
 	
