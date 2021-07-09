@@ -26,13 +26,17 @@ public class BoardService {
 	private final CategoryRepository categoryRepository;
 	private final BoardCategoryRepository boardCategoryRepository;
 	
-	public Long addBoard(BoardDto boardDto) {
+	public Long saveBoard(BoardDto boardDto) {
 		log.info("add Board : {}", boardDto);
 		
 		var board = Board.builder()
+				.title(boardDto.getTitle())
 				.authorId(boardDto.getAuthorId())
 				.content(boardDto.getContent())
+				.viewsCount((long) 0)
+				.recommedCount((long) 0)
 				.build();
+		
 		return boardRepository.save(board).getId();
 	}
 	
@@ -41,8 +45,23 @@ public class BoardService {
 		boardRepository.delete(board);
 	}
 	
-	public Board getBoardInfoById(Long id) {
-		return boardRepository.getById(id);
+	/**
+	 * board id 기반 Board 정보 조회
+	 * @param id
+	 * @return
+	 */
+	public BoardDto getBoardInfoById(Long id) {
+		var board =  boardRepository.getById(id);
+		
+		return BoardDto.builder()
+				.id(board.getId())
+				.authorId(board.getAuthorId())
+				.content(board.getContent())
+				.title(board.getTitle())
+				.uploadTime(board.getUploadTime())
+				.recommendCount(board.getRecommendCount())
+				.viewsCount(board.getViewsCount())
+				.build();
 	}
 	
 	/**
