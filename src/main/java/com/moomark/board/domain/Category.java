@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,7 +32,7 @@ public class Category {
 	@OneToMany(mappedBy = "category")
 	private List<BoardCategory> board;
 	
-	private String type;
+	private String categoryType;
 	
 	@JoinColumn(name = "parent_id")
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -40,4 +41,31 @@ public class Category {
 	@OneToMany(mappedBy = "parent")
 	private List<Category> childList;
 	
+	
+	@Builder
+	public Category(String type) {
+		this.categoryType = type;
+	}
+	
+	
+	/**
+	 * 자식 카테고리 추가 함수
+	 * @param childCategory
+	 */
+	public void addChildCategory(Category childCategory) {
+		childCategory.setParents(this);
+		this.childList.add(childCategory);
+	}
+	
+	public void removeChildCategory(Category category) {
+		this.childList.remove(category);
+	}
+	
+	/**
+	 * 부모 카테고리 세팅 함수
+	 * @param category
+	 */
+	private void setParents(Category category) {
+		this.parent = category;
+	}
 }
