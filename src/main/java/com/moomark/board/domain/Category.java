@@ -47,6 +47,10 @@ public class Category {
 		this.categoryType = type;
 	}
 	
+	public void updateCategoryInfo(String categoryType) {
+		this.categoryType = categoryType;
+	}
+	
 	
 	/**
 	 * 자식 카테고리 추가 함수

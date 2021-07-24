@@ -26,6 +26,18 @@ public class CategoryService {
 	}
 	
 	/**
+	 * category의 정보 변경
+	 * @param categoryId
+	 * @param information
+	 * @return
+	 */
+	public Long updateCategory(Long categoryId, String information) {
+		var category = categoryRepository.getById(categoryId);
+		category.updateCategoryInfo(information);
+		return categoryId;
+	}
+	
+	/**
 	 * category 삭제 함수
 	 * @param id
 	 */
