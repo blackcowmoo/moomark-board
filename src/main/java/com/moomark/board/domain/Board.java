@@ -2,6 +2,8 @@ package com.moomark.board.domain;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,9 +11,9 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -45,6 +47,10 @@ public class Board {
 	
 	@Column(name = "upload_time")
 	private LocalDateTime uploadTime;
+	
+	@Column(name = "category_id")
+	@OneToMany(mappedBy = "board")
+	private List<BoardCategory> boardCategory = new ArrayList<>();
 	
 	@Builder
 	public Board (Long authorId, Long recommedCount, Long viewsCount, String title, String content) {
