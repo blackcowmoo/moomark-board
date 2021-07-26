@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.moomark.board.domain.Board;
 import com.moomark.board.domain.BoardCategory;
 import com.moomark.board.domain.BoardDto;
+import com.moomark.board.domain.CategoryDto;
 import com.moomark.board.repository.BoardCategoryRepository;
 import com.moomark.board.repository.BoardRepository;
 import com.moomark.board.repository.CategoryRepository;
@@ -26,6 +27,11 @@ public class BoardService {
 	private final CategoryRepository categoryRepository;
 	private final BoardCategoryRepository boardCategoryRepository;
 	
+	/**
+	 * 게시판 저장 함수
+	 * @param boardDto
+	 * @return
+	 */
 	public Long saveBoard(BoardDto boardDto) {
 		log.info("add Board : {}", boardDto);
 		
@@ -40,6 +46,10 @@ public class BoardService {
 		return boardRepository.save(board).getId();
 	}
 	
+	/**
+	 * 게시판 지우기 함수
+	 * @param boardId
+	 */
 	public void deleteBoard(Long boardId) {
 		var board = boardRepository.findById(boardId).orElseThrow();
 		boardRepository.delete(board);
@@ -51,16 +61,23 @@ public class BoardService {
 	 * @return
 	 */
 	public BoardDto getBoardInfoById(Long id) {
-		var board =  boardRepository.getById(id);
-		
+			Board getData = boardRepository.getById(id);
+			List<CategoryDto> categories = new ArrayList<>();
+			for(BoardCategory boardCategory : getData.getBoardCategory()) {
+				var category = new CategoryDto();
+				category.setId(boardCategory.getCategory().getId());
+				category.setCategoryType(boardCategory.getCategory().getCategoryType());
+				if(boardCategory.getCategory().getParent() != null) {
+					category.setParentsId(boardCategory.getCategory().getParent().getId());
+				}
+				categories.add(category);
+			}
 		return BoardDto.builder()
-				.id(board.getId())
-				.authorId(board.getAuthorId())
-				.content(board.getContent())
-				.title(board.getTitle())
-				.uploadTime(board.getUploadTime())
-				.recommendCount(board.getRecommendCount())
-				.viewsCount(board.getViewsCount())
+				.title(getData.getTitle())
+				.authorId(getData.getAuthorId())
+				.id(getData.getId())
+				.content(getData.getContent())
+				.categories(categories)
 				.build();
 	}
 	
@@ -115,5 +132,16 @@ public class BoardService {
 
 		var boardCategory = boardCategoryRepository.findByBoardAndCategory(board, category);
 		boardCategoryRepository.delete(boardCategory);
+	}
+	
+	public List<BoardDto> getBoardListByCategoryId(Long categoryId) {
+		List<BoardCategory> boardCategoryList = boardCategoryRepository.findByCategory(
+				categoryRepository.getById(categoryId));
+		
+		List<BoardDto> resultList = new ArrayList<>();
+		for(BoardCategory boardCategory : boardCategoryList) {
+			var board = boardCategory.getBoard();
+			resultList.add();
+		}
 	}
 }
