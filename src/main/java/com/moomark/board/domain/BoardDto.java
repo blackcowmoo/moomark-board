@@ -1,6 +1,8 @@
 package com.moomark.board.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,4 +28,6 @@ public class BoardDto {
 	private String content;
 	
 	private LocalDateTime uploadTime;
+	
+	private List<CategoryDto> categories;
 }
