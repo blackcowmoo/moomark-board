@@ -1,6 +1,7 @@
 package com.moomark.board.domain;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -61,6 +62,10 @@ public class Category {
 		this.childList.add(childCategory);
 	}
 	
+	/**
+	 * 자식 카테고리 제거 함수
+	 * @param category
+	 */
 	public void removeChildCategory(Category category) {
 		this.childList.remove(category);
 	}
@@ -71,5 +76,16 @@ public class Category {
 	 */
 	private void setParents(Category category) {
 		this.parent = category;
+	}
+	
+	/**
+	 * Parent의 값이 null인지 확인하며 반환하는 함수
+	 * @return
+	 */
+	public Long getParentIdCheckNull() {
+		return Optional.ofNullable(this.parent)
+				.map(Category::getParent)
+				.map(Category::getId)
+				.orElse((long) 0);
 	}
 }
