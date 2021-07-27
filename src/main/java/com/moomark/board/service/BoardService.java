@@ -32,6 +32,7 @@ public class BoardService {
 	 * @param boardDto
 	 * @return
 	 */
+	@Transactional
 	public Long saveBoard(BoardDto boardDto) {
 		log.info("add Board : {}", boardDto);
 		
@@ -50,6 +51,7 @@ public class BoardService {
 	 * 게시판 지우기 함수
 	 * @param boardId
 	 */
+	@Transactional
 	public void deleteBoard(Long boardId) {
 		var board = boardRepository.findById(boardId).orElseThrow();
 		boardRepository.delete(board);
@@ -111,6 +113,7 @@ public class BoardService {
 	 * @param boardId
 	 * @param categoryId
 	 */
+	@Transactional
 	public void addCategoryToBoard(Long boardId, Long categoryId) {
 		var board = boardRepository.findById(boardId).orElseThrow();
 		var category = categoryRepository.findById(categoryId).orElseThrow();
@@ -126,6 +129,7 @@ public class BoardService {
 	 * @param boardId
 	 * @param categoryId
 	 */
+	@Transactional
 	public void deleteCategoryToBoard(Long boardId, Long categoryId) {
 		var board = boardRepository.findById(boardId).orElseThrow();
 		var category = categoryRepository.findById(categoryId).orElseThrow();
@@ -134,6 +138,12 @@ public class BoardService {
 		boardCategoryRepository.delete(boardCategory);
 	}
 	
+	
+	/**
+	 * CategoryID 기반 Board정보 조회
+	 * @param categoryId
+	 * @return
+	 */
 	public List<BoardDto> getBoardListByCategoryId(Long categoryId) {
 		List<BoardCategory> boardCategoryList = boardCategoryRepository.findByCategory(
 				categoryRepository.getById(categoryId));
@@ -141,7 +151,16 @@ public class BoardService {
 		List<BoardDto> resultList = new ArrayList<>();
 		for(BoardCategory boardCategory : boardCategoryList) {
 			var board = boardCategory.getBoard();
-			resultList.add();
+			resultList.add(
+					BoardDto.builder()
+					.title(board.getTitle())
+					.authorId(board.getAuthorId())
+					.id(board.getId())
+					.content(board.getContent())
+					.build()
+					);
 		}
+		
+		return resultList;
 	}
 }
