@@ -66,14 +66,15 @@ public class BoardService {
 			Board getData = boardRepository.getById(id);
 			List<CategoryDto> categories = new ArrayList<>();
 			for(BoardCategory boardCategory : getData.getBoardCategory()) {
-				var category = new CategoryDto();
-				category.setId(boardCategory.getCategory().getId());
-				category.setCategoryType(boardCategory.getCategory().getCategoryType());
-				if(boardCategory.getCategory().getParent() != null) {
-					category.setParentsId(boardCategory.getCategory().getParent().getId());
-				}
+				var category = CategoryDto.builder()
+						.id(boardCategory.getCategory().getId())
+						.categoryType(boardCategory.getCategory().getCategoryType())
+						.parentsId(boardCategory.getCategory().getParentAfterNullCheck())
+						.build();
+				
 				categories.add(category);
 			}
+			
 		return BoardDto.builder()
 				.title(getData.getTitle())
 				.authorId(getData.getAuthorId())
@@ -101,6 +102,7 @@ public class BoardService {
 					.viewsCount(board.getViewsCount())
 					.recommendCount(board.getRecommendCount())
 					.build();
+			
 			boardDtoList.add(boardDto);
 			
 		}
