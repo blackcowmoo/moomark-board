@@ -82,7 +82,7 @@ public class Category {
 	 * Parent의 값이 null인지 확인하며 반환하는 함수
 	 * @return
 	 */
-	public Long getParentIdCheckNull() {
+	public Long getParentAfterNullCheck() {
 		return Optional.ofNullable(this.parent)
 				.map(Category::getParent)
 				.map(Category::getId)
