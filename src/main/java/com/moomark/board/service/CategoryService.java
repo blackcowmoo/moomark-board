@@ -91,4 +91,20 @@ public class CategoryService {
 				.build();
 		
 	}
+	
+	/**
+	 * 자식 카테고링 삭제 함수
+	 * @param parentId
+	 * @param childId
+	 * @throws Exception
+	 */
+	public void deleteChildCategory(Long parentId, Long childId) throws Exception {
+		var parentCategory = categoryRepository.findById(parentId).orElseThrow(()
+				-> new Exception("부모 카테고리 정보가 없습니다."));
+		var childCategory = categoryRepository.findById(childId).orElseThrow(()
+				-> new Exception("자식 카테고리 정보가 없습니다."));
+		
+		parentCategory.removeChildCategory(childCategory);
+		
+	}
 }

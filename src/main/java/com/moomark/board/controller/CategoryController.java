@@ -26,6 +26,12 @@ public class CategoryController {
 		String categoryInfo;
 	}
 	
+	@Data
+	static class RequestChildCategory {
+		Long parentId;
+		Long childId;
+	}
+	
 	/* Get */
 	@GetMapping("/category/{id}")
 	public CategoryDto getCategoryInfo(@PathVariable("id") Long categoryId) throws Exception {
@@ -38,6 +44,11 @@ public class CategoryController {
 		return categoryService.addCategory(cateogryInfo);
 	}
 	
+	@PostMapping("/category/child")
+	public void addChildCategory(@RequestBody RequestChildCategory request) {
+		categoryService.addChildCategory(request.parentId, request.childId);
+	}
+	
 	/* Put */
 	@PutMapping("/category/child")
 	public void updateCategoryInfo(@RequestBody RequestCategoryInfo requestCategoryInfo) throws Exception {
@@ -47,7 +58,13 @@ public class CategoryController {
 	
 	/* Delete */
 	@DeleteMapping("/category")
-	public void delteCateogry(@RequestBody RequestCategoryInfo requestCategoryInfo) throws Exception {
+	public void deleteCateogory(@RequestBody RequestCategoryInfo requestCategoryInfo) throws Exception {
 		categoryService.deleteCategory(requestCategoryInfo.getCategoryId());
+	}
+	
+	@DeleteMapping("/category/child")
+	public void deleteChildCategory(@RequestBody RequestChildCategory requset) throws Exception {
+		categoryService.deleteChildCategory(requset.parentId, requset.childId);
+		
 	}
 }
