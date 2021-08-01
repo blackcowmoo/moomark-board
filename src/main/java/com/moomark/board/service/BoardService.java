@@ -122,16 +122,21 @@ public class BoardService {
 	 * 
 	 * @param boardId
 	 * @param categoryId
+	 * @throws Exception 
 	 */
 	@Transactional
-	public void addCategoryToBoard(Long boardId, Long categoryId) {
-		var board = boardRepository.findById(boardId).orElseThrow();
-		var category = categoryRepository.findById(categoryId).orElseThrow();
+	public void addCategoryToBoard(Long boardId, Long categoryId) throws Exception {
+		var board = boardRepository.findById(boardId).orElseThrow(() 
+				-> new Exception("카테고리를 추가하고자 하는 게시글을 찾을 수 없습니다."));
+		var category = categoryRepository.findById(categoryId).orElseThrow(()
+				-> new Exception("게시글에 추가하고자 하는 카테고리를 찾을 수 없습니다."));
 
 		boardCategoryRepository.save(BoardCategory.builder()
 				.board(board)
 				.category(category)
 				.build());
+		
+		log.info("Category info : {}", board.getBoardCategory().get(0).getCategory().getCategoryType());
 	}
 
 	/**

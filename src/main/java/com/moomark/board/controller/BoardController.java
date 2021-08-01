@@ -22,12 +22,19 @@ public class BoardController {
 	
 	/* Static class */
 	@Data
-	static class RequestBoardInfo{
+	static class RequestBoardInfo {
 		private Long authorId;
 		
 		private String title;
 		
 		private String content;
+	}
+	
+	@Data
+	static class RequestAddCategory {
+		private Long boardId;
+		
+		private Long cateogyId;
 	}
 	
 	/* Get */
@@ -45,6 +52,11 @@ public class BoardController {
 				.title(requestBoardInfo.title)
 				.content(requestBoardInfo.content)
 				.build());
+	}
+	
+	@PostMapping("/board/category")
+	public void addCategoryToBoard(@RequestBody RequestAddCategory request) throws Exception {
+		boardService.addCategoryToBoard(request.boardId, request.cateogyId);
 	}
 	
 	/* Put */
