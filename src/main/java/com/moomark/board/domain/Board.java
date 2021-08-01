@@ -53,13 +53,28 @@ public class Board {
 	private List<BoardCategory> boardCategory = new ArrayList<>();
 	
 	@Builder
-	public Board (Long authorId, Long recommedCount, Long viewsCount, String title, String content) {
+	public Board (Long authorId, String title, String content) {
 		this.authorId = authorId;
-		this.recommendCount = recommedCount;
-		this.viewsCount = viewsCount;
+		this.title = title;
+		this.content = content;
+		this.recommendCount = (long) 0;
+		this.viewsCount = (long) 0;
+		this.uploadTime = LocalDateTime.now();
+	}
+	
+	/* Function List */
+	public void upCountViewCount() {
+		this.viewsCount++;
+	}
+	
+	public void downCountViewCount() {
+		if(0 < this.viewsCount)
+			this.viewsCount--;
+	}
+	
+	public void updateInformation(String title, String content) {
 		this.title = title;
 		this.content = content;
 		this.uploadTime = LocalDateTime.now();
 	}
-	
 }
