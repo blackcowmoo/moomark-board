@@ -74,8 +74,8 @@ public class Category {
 	 * 부모 카테고리 세팅 함수
 	 * @param category
 	 */
-	private void setParents(Category category) {
-		this.parent = category;
+	public void setParents(Category parentCategory) {
+		this.parent = parentCategory;
 	}
 	
 	/**
@@ -84,7 +84,6 @@ public class Category {
 	 */
 	public Long getParentAfterNullCheck() {
 		return Optional.ofNullable(this.parent)
-				.map(Category::getParent)
 				.map(Category::getId)
 				.orElse((long) 0);
 	}
