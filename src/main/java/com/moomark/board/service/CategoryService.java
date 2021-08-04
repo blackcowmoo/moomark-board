@@ -53,8 +53,9 @@ public class CategoryService {
 	 */
 	@Transactional
 	public void deleteCategory(Long id) throws Exception {
-		getCategoryById(id);
-		categoryRepository.deleteById(id);
+		var category = categoryRepository.findById(id).orElseThrow(() 
+				-> new Exception("카테고리 정보가 없습니다."));
+		categoryRepository.deleteById(category.getId());
 	}
 	
 	
@@ -93,7 +94,7 @@ public class CategoryService {
 	}
 	
 	/**
-	 * 자식 카테고링 삭제 함수
+	 * 자식 카테고리 삭제 함수
 	 * @param parentId
 	 * @param childId
 	 * @throws Exception
