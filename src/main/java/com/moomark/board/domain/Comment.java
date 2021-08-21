@@ -1,6 +1,8 @@
 package com.moomark.board.domain;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,5 +54,27 @@ public class Comment {
 	public Comment(Long userId, String content) {
 		this.userId = userId;
 		this.content = content;
+	}
+	
+	/**
+	 * 부모 댓글 ID 정보 조회
+	 * @return
+	 */
+	public Long getParentId() {
+		return Optional.ofNullable(this.parent)
+				.map(Comment::getId)
+				.orElse((long) 0);
+	}
+	
+	/**
+	 * 자식 댓글 ID 정보 조회
+	 * @return
+	 */
+	public List<Long> getChildIdList() {
+		List<Long> result = new ArrayList<>();
+		for(Comment child : this.childList) {
+			result.add(child.getId());
+		}
+		return result;
 	}
 }
