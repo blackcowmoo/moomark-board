@@ -1,2 +1,2 @@
-# moomark_board
+# moomark-board
  

@@ -13,7 +13,7 @@ public class CategoryService {
 	private final CategoryRepository categoryRepository;
 	
 	/**
-	 * category 추가 함수
+	 * Add category 
 	 * @param information
 	 * @return
 	 */
@@ -26,7 +26,7 @@ public class CategoryService {
 	}
 	
 	/**
-	 * category 삭제 함수
+	 * Delete category 
 	 * @param id
 	 */
 	public void deleteCategory(Long id) {
@@ -35,7 +35,7 @@ public class CategoryService {
 	
 	
 	/**
-	 * child category 추가 함수
+	 * Add child category
 	 * @param parentId
 	 * @param childId
 	 */
