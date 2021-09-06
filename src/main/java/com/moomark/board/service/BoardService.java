@@ -46,7 +46,7 @@ public class BoardService {
 	}
 	
 	/**
-	 * board id 기반 Board 정보 조회
+	 * Get board information by board id
 	 * @param id
 	 * @return
 	 */
@@ -65,7 +65,7 @@ public class BoardService {
 	}
 	
 	/**
-	 * Title 기반 Board 리스트 가져오기
+	 * Get board Information by Title
 	 * @param title
 	 * @return
 	 */
@@ -90,7 +90,7 @@ public class BoardService {
 	}
 	
 	/**
-	 * Board에 Category 추가
+	 * Add category to board
 	 * @param boardId
 	 * @param categoryId
 	 */
@@ -105,7 +105,7 @@ public class BoardService {
 	}
 	
 	/**
-	 * Board에서 Category 제거
+	 * delete category to board
 	 * @param boardId
 	 * @param categoryId
 	 */
