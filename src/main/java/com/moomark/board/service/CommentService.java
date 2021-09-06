@@ -3,8 +3,11 @@ package com.moomark.board.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.moomark.board.domain.Board;
 import com.moomark.board.domain.Comment;
 import com.moomark.board.domain.CommentDto;
+import com.moomark.board.repository.BoardCommentRepository;
+import com.moomark.board.repository.BoardRepository;
 import com.moomark.board.repository.CommentRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -15,24 +18,23 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CommentService {
+	private final BoardRepository boardRepository;
 	private final CommentRepository commentRepository;
+	private final BoardCommentRepository boardCommentRepository;
 	
+	// TODO : 게시판 번호를 기반으로 모든 댓글 가져오기 구현
 	/**
 	 * 댓글 정보 조회
 	 * @param boardId
 	 * @return
 	 * @throws Exception
 	 */
-	public CommentDto getComment(Long boardId) throws Exception {
-		var comment = commentRepository.findById(boardId).orElseThrow(
-				() -> new Exception("댓글을 불러오지 못했습니다."));
-		return CommentDto.builder()
-				.boardId(comment.getId())
-				.userId(comment.getUserId())
-				.content(comment.getContent())
-				.parentsId(comment.getParentId())
-				.childIdList(comment.getChildIdList())
-				.build();
+	public CommentDto getCommentByBoardId(Long boardId) throws Exception {
+		Board board = boardRepository.findById(boardId).orElseThrow(
+				() -> new Exception("작성된 게시글이 없습니다."));
+		
+		boardCommentRepository.findByBoard(board);
+		return null;
 	}
 	
 	/**
