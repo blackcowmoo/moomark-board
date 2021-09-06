@@ -54,7 +54,7 @@ public class Category {
 	
 	
 	/**
-	 * 자식 카테고리 추가 함수
+	 * Add child category
 	 * @param childCategory
 	 */
 	public void addChildCategory(Category childCategory) {
@@ -71,7 +71,7 @@ public class Category {
 	}
 	
 	/**
-	 * 부모 카테고리 세팅 함수
+	 * Set parents category
 	 * @param category
 	 */
 	public void setParents(Category parentCategory) {
