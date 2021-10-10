@@ -27,14 +27,14 @@ public class CommentService {
 	private final BoardCommentRepository boardCommentRepository;
 	
 	/**
-	 * 댓글 정보 조회
+	 * Get comment list by board id
 	 * @param boardId
 	 * @return
 	 * @throws Exception
 	 */
 	public List<CommentDto> getCommentByBoardId(Long boardId) throws Exception {
 		Board board = boardRepository.findById(boardId).orElseThrow(
-				() -> new Exception("작성된 게시글이 없습니다."));
+				() -> new Exception("No comment information was found by board id."));
 		
 		List<BoardComment> boardCommentList = boardCommentRepository.findByBoard(board);
 		List<CommentDto> resultList = new ArrayList<>();
@@ -51,20 +51,20 @@ public class CommentService {
 	}
 	
 	/**
-	 * 게시글 번호 기반의 댓글 수 반환
+	 * Get comment count by board id
 	 * @param boardId
 	 * @return
 	 * @throws Exception
 	 */
 	public int getCommentCountByBoardId(Long boardId) throws Exception{
 		Board board = boardRepository.findById(boardId).orElseThrow(
-				() -> new Exception("조회를 하고자 하는 게시글이 없습니다."));
+				() -> new Exception("No board information was found by board id."));
 		
 		return boardCommentRepository.findByBoard(board).size();
 	}
 	
 	/**
-	 * Comment 저장 함수
+	 * save comment 
 	 * @return
 	 */
 	public Long saveComment(CommentDto commentDto) {
@@ -76,14 +76,14 @@ public class CommentService {
 	}
 	
 	/**
-	 * Comment 삭제 함수
+	 * delete comment
 	 * @param id
 	 * @return
 	 */
 	public Boolean deleteComment(Long id) {
 		try {
 			var comment = commentRepository.findById(id).orElseThrow(()
-					-> new Exception("찾는 댓글 정보가 없습니다."));
+					-> new Exception("No comment information was found by comment id."));
 			commentRepository.deleteById(comment.getId());
 			return true;
 		} catch (Exception e) {

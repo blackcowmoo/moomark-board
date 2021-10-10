@@ -57,7 +57,7 @@ public class Comment {
 	}
 	
 	/**
-	 * 부모 댓글 ID 정보 조회
+	 * Get parent comment id
 	 * @return
 	 */
 	public Long getParentId() {
@@ -67,7 +67,7 @@ public class Comment {
 	}
 	
 	/**
-	 * 자식 댓글 ID 정보 조회
+	 * Get child comment list
 	 * @return
 	 */
 	public List<Long> getChildIdList() {
