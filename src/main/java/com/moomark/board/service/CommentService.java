@@ -3,6 +3,9 @@ package com.moomark.board.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +50,33 @@ public class CommentService {
 					.build();
 			resultList.add(commentDto);
 		}
+		return resultList;
+	}
+	
+	/**
+	 * Get comment list by board id by pageable
+	 * @param boardId
+	 * @param pageNumber
+	 * @return
+	 * @throws Exception
+	 */
+	public List<CommentDto> getCommentByBoardId(Long boardId, int pageNumber) throws Exception {
+		Board board = boardRepository.findById(boardId).orElseThrow(
+				() -> new Exception("No comment information was found by board id."));
+		
+		PageRequest pageRequest = PageRequest.of(pageNumber, 20);
+		Page<BoardComment> boardCommmentPage = boardCommentRepository.findByBoard(board, pageRequest);
+		List<CommentDto> resultList = new ArrayList<>();
+		for(BoardComment boardComment : boardCommmentPage) {
+			Comment comment = boardComment.getComment();
+			CommentDto commentDto = CommentDto.builder()
+					.id(comment.getId())
+					.content(comment.getContent())
+					.parentsId(comment.getParentId())
+					.build();
+			resultList.add(commentDto);
+		}
+		
 		return resultList;
 	}
 	
