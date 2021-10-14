@@ -54,7 +54,7 @@ public class CommentService {
 	}
 	
 	/**
-	 * Get comment list by board id by pageable
+	 * Get comment list by page to board id
 	 * @param boardId
 	 * @param pageNumber
 	 * @return
@@ -91,6 +91,33 @@ public class CommentService {
 				() -> new Exception("No board information was found by board id."));
 		
 		return boardCommentRepository.findByBoard(board).size();
+	}
+	
+	/**
+	 * Get comment information by user id
+	 * @param userId
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<CommentDto> getCommentByUserId(Long boardId, Long userId) throws Exception {
+		Board board = boardRepository.findById(boardId).orElseThrow(
+				() -> new Exception("No comment information was found by board id"));
+		
+		List<BoardComment> boardCommentList = boardCommentRepository.findByBoard(board);
+		
+		List<CommentDto> resultList = new ArrayList<>();
+		for(BoardComment boardComment : boardCommentList) {
+			Comment comment = boardComment.getComment();
+			if(comment.getUserId() == userId) {
+				CommentDto commentDto = CommentDto.builder()
+						.id(comment.getId())
+						.content(comment.getContent())
+						.parentsId(comment.getParentId())
+						.build();
+				resultList.add(commentDto);
+			}
+		}
+		return resultList;
 	}
 	
 	/**
