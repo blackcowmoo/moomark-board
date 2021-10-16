@@ -15,4 +15,5 @@ public class CommentDto {
 	private Long boardId;
 	private Long parentsId;
 	private List<Long> childIdList;
+	private String content;
 }
