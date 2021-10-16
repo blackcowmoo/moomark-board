@@ -63,7 +63,7 @@ public class Category {
 	}
 	
 	/**
-	 * 자식 카테고리 제거 함수
+	 * remove child id
 	 * @param category
 	 */
 	public void removeChildCategory(Category category) {
@@ -79,7 +79,7 @@ public class Category {
 	}
 	
 	/**
-	 * Parent의 값이 null인지 확인하며 반환하는 함수
+	 * return parent id with check null
 	 * @return
 	 */
 	public Long getParentAfterNullCheck() {
