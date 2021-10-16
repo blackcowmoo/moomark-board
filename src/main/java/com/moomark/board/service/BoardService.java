@@ -33,8 +33,6 @@ public class BoardService {
 				.title(boardDto.getTitle())
 				.authorId(boardDto.getAuthorId())
 				.content(boardDto.getContent())
-				.viewsCount((long) 0)
-				.recommedCount((long) 0)
 				.build();
 		
 		return boardRepository.save(board).getId();

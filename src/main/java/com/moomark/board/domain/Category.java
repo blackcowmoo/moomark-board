@@ -1,6 +1,7 @@
 package com.moomark.board.domain;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -47,6 +48,10 @@ public class Category {
 		this.categoryType = type;
 	}
 	
+	public void updateCategoryInfo(String categoryType) {
+		this.categoryType = categoryType;
+	}
+	
 	
 	/**
 	 * Add child category
@@ -57,6 +62,10 @@ public class Category {
 		this.childList.add(childCategory);
 	}
 	
+	/**
+	 * remove child id
+	 * @param category
+	 */
 	public void removeChildCategory(Category category) {
 		this.childList.remove(category);
 	}
@@ -65,7 +74,17 @@ public class Category {
 	 * Set parents category
 	 * @param category
 	 */
-	private void setParents(Category category) {
-		this.parent = category;
+	public void setParents(Category parentCategory) {
+		this.parent = parentCategory;
+	}
+	
+	/**
+	 * return parent id with check null
+	 * @return
+	 */
+	public Long getParentAfterNullCheck() {
+		return Optional.ofNullable(this.parent)
+				.map(Category::getId)
+				.orElse((long) 0);
 	}
 }
