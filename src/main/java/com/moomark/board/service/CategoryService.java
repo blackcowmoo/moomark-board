@@ -1,12 +1,8 @@
 package com.moomark.board.service;
 
 import org.springframework.stereotype.Service;
-import com.moomark.board.domain.Board;
-import com.moomark.board.domain.BoardCategory;
 import com.moomark.board.domain.Category;
 import com.moomark.board.domain.CategoryDto;
-import com.moomark.board.repository.BoardCategoryRepository;
-import com.moomark.board.repository.BoardRepository;
 import com.moomark.board.repository.CategoryRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -15,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryService {
   private final CategoryRepository categoryRepository;
-  private final BoardRepository boardRepository;
-  private final BoardCategoryRepository boardCategoryRepository;
 
   /**
    * Get category information by category id;
@@ -32,6 +26,7 @@ public class CategoryService {
     return CategoryDto.builder().categoryType(category.getCategoryType()).id(category.getId())
         .parentsId(category.getParentAfterNullCheck()).build();
   }
+
 
   /**
    * Add category
@@ -99,21 +94,4 @@ public class CategoryService {
     return true;
   }
 
-  /**
-   * Add Category and Board mapping 
-   * 
-   * @param boardId
-   * @param categoryId
-   * @throws Exception
-   */
-  public void addCateogryToBoard(Long boardId, Long categoryId) throws Exception {
-    Category category = categoryRepository.findById(categoryId)
-        .orElseThrow(() -> new Exception("Can not find category by category id"));
-    Board board = boardRepository.findById(boardId)
-        .orElseThrow(() -> new Exception("Can not find board by board id"));
-    boardCategoryRepository.save(BoardCategory.builder().
-        category(category).
-        board(board).
-        build());
-  }
 }

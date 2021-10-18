@@ -14,21 +14,16 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder()
-				.title("Moomark board API document")
-				.description("This is Moomark board API document information")
-				.build();
-	}
-	
-	@Bean
-	public Docket commonApi() {
-		return new Docket(DocumentationType.SWAGGER_2)
-				.groupName("Moomark board")
-				.apiInfo(this.apiInfo())
-				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.moomark.board.controller"))
-				.paths(PathSelectors.ant("/**"))
-				.build();
-	}
+  private ApiInfo apiInfo() {
+    return new ApiInfoBuilder().title("Moomark board API document")
+        .description("This is Moomark board API document information").build();
+  }
+
+  @Bean
+  public Docket commonApi() {
+    return new Docket(DocumentationType.SWAGGER_2).groupName("Moomark board")
+        .apiInfo(this.apiInfo()).select()
+        .apis(RequestHandlerSelectors.basePackage("com.moomark.board.controller"))
+        .paths(PathSelectors.ant("/**")).build();
+  }
 }
