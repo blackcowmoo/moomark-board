@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moomark.board.domain.CategoryDto;
+import com.moomark.board.service.BoardService;
 import com.moomark.board.service.CategoryService;
 
 import lombok.Data;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryController {
   private final CategoryService categoryService;
+  private final BoardService boardService;
 
   /* static class */
   @Data
@@ -58,7 +60,7 @@ public class CategoryController {
   @PostMapping("/category/mapping")
   public void addCategoryToBoar(@RequestBody RequestAddCategoryToBoard requestInformation)
       throws Exception {
-    categoryService.addCateogryToBoard(requestInformation.getBoardId(),
+    boardService.addCategoryToBoard(requestInformation.getBoardId(),
         requestInformation.getCategoryId());
   }
 
