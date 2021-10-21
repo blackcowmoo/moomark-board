@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.moomark.board.domain.BoardDto;
 import com.moomark.board.domain.CommentDto;
+import com.moomark.board.exception.JpaException;
 import com.moomark.board.service.BoardService;
 import com.moomark.board.service.CommentService;
 
@@ -46,7 +47,7 @@ public class BoardController {
 	}
 	
 	@DeleteMapping("/board/{boardId}")
-	public void deleteBoardInfoById(@PathVariable("boardId") Long boardId) {
+	public void deleteBoardInfoById(@PathVariable("boardId") Long boardId) throws JpaException {
 		boardService.deleteBoard(boardId);
 	}
 	
