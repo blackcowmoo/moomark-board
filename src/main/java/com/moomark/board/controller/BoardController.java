@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.moomark.board.domain.BoardDto;
 import com.moomark.board.domain.CommentDto;
+import com.moomark.board.exception.JpaException;
 import com.moomark.board.service.BoardService;
 import com.moomark.board.service.CommentService;
 
@@ -28,19 +29,20 @@ public class BoardController {
    * =================================== GET ===================================
    */
   @GetMapping("/board/{boardId}/content")
-  public ResponseEntity<BoardDto> getBoardInfoById(@PathVariable("boardId") Long boardId) {
+  public ResponseEntity<BoardDto> getBoardInfoById(@PathVariable("boardId") Long boardId)
+      throws JpaException {
     return new ResponseEntity<>(boardService.getBoardInfoById(boardId), HttpStatus.OK);
   }
 
   @GetMapping("/board/{boardId}/info")
-  public ResponseEntity<RequestTotalBoardInfo> getTotalBoardInfoById(@PathVariable("boardId") Long boardId)
-      throws Exception {
+  public ResponseEntity<RequestTotalBoardInfo> getTotalBoardInfoById(
+      @PathVariable("boardId") Long boardId) throws Exception {
     RequestTotalBoardInfo result = new RequestTotalBoardInfo();
     result.setBoardInfo(boardService.getBoardInfoById(boardId));
     result.setTotalCommentCount(commentService.getCommentCountByBoardId(boardId));
     result.setCommentList(commentService.getCommentByBoardId(boardId));
-    
-    return new ResponseEntity<> (result, HttpStatus.OK);
+
+    return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
   /*
@@ -52,10 +54,11 @@ public class BoardController {
   }
 
   @DeleteMapping("/board/{boardId}")
-  public ResponseEntity<Integer> deleteBoardInfoById(@PathVariable("boardId") Long boardId) {
+  public ResponseEntity<String> deleteBoardInfoById(@PathVariable("boardId") Long boardId)
+      throws JpaException {
     boardService.deleteBoard(boardId);
 
-    return new ResponseEntity<>(0, HttpStatus.OK);
+    return new ResponseEntity<>("Success to delete board information", HttpStatus.OK);
   }
 
   /*

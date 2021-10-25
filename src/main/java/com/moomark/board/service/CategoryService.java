@@ -3,6 +3,8 @@ package com.moomark.board.service;
 import org.springframework.stereotype.Service;
 import com.moomark.board.domain.Category;
 import com.moomark.board.domain.CategoryDto;
+import com.moomark.board.exception.ErrorCode;
+import com.moomark.board.exception.JpaException;
 import com.moomark.board.repository.CategoryRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,9 +21,10 @@ public class CategoryService {
    * @return
    * @throws Exception
    */
-  public CategoryDto getCategoryById(Long id) throws Exception {
+  public CategoryDto getCategoryById(Long id) throws JpaException {
     Category category = categoryRepository.findById(id)
-        .orElseThrow(() -> new Exception("Can not find by category id"));
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_CATEGORY.getMsg(),
+            ErrorCode.CANNOT_FIND_CATEGORY.getCode()));
 
     return CategoryDto.builder().categoryType(category.getCategoryType()).id(category.getId())
         .parentsId(category.getParentAfterNullCheck()).build();
@@ -47,9 +50,10 @@ public class CategoryService {
    * @param information
    * @throws Exception
    */
-  public void updateCategory(Long categoryId, String information) throws Exception {
+  public void updateCategory(Long categoryId, String information) throws JpaException {
     Category category = categoryRepository.findById(categoryId)
-        .orElseThrow(() -> new Exception("Can not find category by catego id"));
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_CATEGORY.getMsg(),
+            ErrorCode.CANNOT_FIND_CATEGORY.getCode()));
 
     category.updateCategoryInfo(information);
   }
@@ -68,10 +72,16 @@ public class CategoryService {
    * 
    * @param parentId
    * @param childId
+   * @throws JpaException
    */
-  public void addChildCategory(Long parentId, Long childId) {
-    var parentCategory = categoryRepository.findById(parentId).orElseThrow();
-    var childCategory = categoryRepository.findById(childId).orElseThrow();
+  public void addChildCategory(Long parentId, Long childId) throws JpaException {
+    var parentCategory = categoryRepository.findById(parentId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_PARENT_CATEGORY.getMsg(),
+            ErrorCode.CANNOT_FIND_PARENT_CATEGORY.getCode()));
+
+    var childCategory = categoryRepository.findById(childId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_CHILD_CATEGORY.getMsg(),
+            ErrorCode.CANNOT_FIND_CHILD_CATEGORY.getCode()));
 
     parentCategory.addChildCategory(childCategory);
   }
@@ -84,12 +94,14 @@ public class CategoryService {
    * @return
    * @throws Exception
    */
-  public boolean deleteChildCategory(Long parentId, Long childId) throws Exception {
+  public boolean deleteChildCategory(Long parentId, Long childId) throws JpaException {
 
     var parentCategory = categoryRepository.findById(parentId)
-        .orElseThrow(() -> new Exception("Can not find parent category by category id"));
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_PARENT_CATEGORY.getMsg(),
+            ErrorCode.CANNOT_FIND_PARENT_CATEGORY.getCode()));
     var childCategory = categoryRepository.findById(childId)
-        .orElseThrow(() -> new Exception("Can not find child cateogry by cateogory id"));
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_CHILD_CATEGORY.getMsg(),
+            ErrorCode.CANNOT_FIND_CHILD_CATEGORY.getCode()));
     parentCategory.removeChildCategory(childCategory);
     return true;
   }

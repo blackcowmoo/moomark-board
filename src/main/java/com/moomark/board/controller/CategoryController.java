@@ -1,5 +1,7 @@
 package com.moomark.board.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moomark.board.domain.CategoryDto;
+import com.moomark.board.exception.JpaException;
 import com.moomark.board.service.BoardService;
 import com.moomark.board.service.CategoryService;
 
@@ -42,8 +45,9 @@ public class CategoryController {
 
   /* Get */
   @GetMapping("/category/{id}")
-  public CategoryDto getCategoryInfo(@PathVariable("id") Long categoryId) throws Exception {
-    return categoryService.getCategoryById(categoryId);
+  public ResponseEntity<CategoryDto> getCategoryInfo(@PathVariable("id") Long categoryId)
+      throws JpaException {
+    return new ResponseEntity<>(categoryService.getCategoryById(categoryId), HttpStatus.OK);
   }
 
   /* Post */
@@ -53,13 +57,15 @@ public class CategoryController {
   }
 
   @PostMapping("/category/child")
-  public void addChildCategory(@RequestBody RequestChildCategory request) {
+  public ResponseEntity<String> addChildCategory(@RequestBody RequestChildCategory request)
+      throws JpaException {
     categoryService.addChildCategory(request.parentId, request.childId);
+    return new ResponseEntity<>("Success to add child category", HttpStatus.OK);
   }
 
   @PostMapping("/category/mapping")
-  public void addCategoryToBoar(@RequestBody RequestAddCategoryToBoard requestInformation)
-      throws Exception {
+  public void addCategoryToBoard(@RequestBody RequestAddCategoryToBoard requestInformation)
+      throws JpaException {
     boardService.addCategoryToBoard(requestInformation.getBoardId(),
         requestInformation.getCategoryId());
   }
@@ -67,7 +73,7 @@ public class CategoryController {
   /* Put */
   @PutMapping("/category/child")
   public void updateCategoryInfo(@RequestBody RequestCategoryInfo requestCategoryInfo)
-      throws Exception {
+      throws JpaException {
     categoryService.updateCategory(requestCategoryInfo.getCategoryId(),
         requestCategoryInfo.getCategoryInfo());
   }
@@ -75,12 +81,12 @@ public class CategoryController {
   /* Delete */
   @DeleteMapping("/category")
   public void deleteCateogory(@RequestBody RequestCategoryInfo requestCategoryInfo)
-      throws Exception {
+      throws JpaException {
     categoryService.deleteCategory(requestCategoryInfo.getCategoryId());
   }
 
   @DeleteMapping("/category/child")
-  public void deleteChildCategory(@RequestBody RequestChildCategory requset) throws Exception {
+  public void deleteChildCategory(@RequestBody RequestChildCategory requset) throws JpaException {
     categoryService.deleteChildCategory(requset.parentId, requset.childId);
 
   }

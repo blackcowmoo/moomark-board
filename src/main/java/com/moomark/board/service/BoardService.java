@@ -10,6 +10,8 @@ import com.moomark.board.domain.Board;
 import com.moomark.board.domain.BoardCategory;
 import com.moomark.board.domain.BoardDto;
 import com.moomark.board.domain.Category;
+import com.moomark.board.exception.ErrorCode;
+import com.moomark.board.exception.JpaException;
 import com.moomark.board.repository.BoardCategoryRepository;
 import com.moomark.board.repository.BoardRepository;
 import com.moomark.board.repository.CategoryRepository;
@@ -36,8 +38,16 @@ public class BoardService {
     return boardRepository.save(board).getId();
   }
 
-  public void deleteBoard(Long boardId) {
-    var board = boardRepository.findById(boardId).orElseThrow();
+  /**
+   * delete board by board id
+   * 
+   * @param boardId
+   * @throws JpaException
+   */
+  public void deleteBoard(Long boardId) throws JpaException {
+    var board = boardRepository.findById(boardId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
+            ErrorCode.CANNOT_FIND_BOARD.getCode()));
     boardRepository.delete(board);
   }
 
@@ -46,9 +56,12 @@ public class BoardService {
    * 
    * @param id
    * @return
+   * @throws JpaException
    */
-  public BoardDto getBoardInfoById(Long id) {
-    var board = boardRepository.getById(id);
+  public BoardDto getBoardInfoById(Long id) throws JpaException {
+    var board = boardRepository.findById(id)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
+            ErrorCode.CANNOT_FIND_BOARD.getCode()));
     board.upCountViewCount();
     return BoardDto.builder().id(board.getId()).authorId(board.getAuthorId())
         .content(board.getContent()).title(board.getTitle()).uploadTime(board.getUploadTime())
@@ -81,9 +94,11 @@ public class BoardService {
    * 
    * @param boardId
    * @param categoryId
+   * @throws JpaException
    */
-  public void addCategoryToBoard(Long boardId, Long categoryId) {
-    var board = boardRepository.findById(boardId).orElseThrow();
+  public void addCategoryToBoard(Long boardId, Long categoryId) throws JpaException {
+    var board = boardRepository.findById(boardId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg()));
     var category = categoryRepository.findById(categoryId).orElseThrow();
 
     boardCategoryRepository.save(BoardCategory.builder().board(board).category(category).build());
@@ -94,10 +109,15 @@ public class BoardService {
    * 
    * @param boardId
    * @param categoryId
+   * @throws JpaException
    */
-  public void deleteCategoryToBoard(Long boardId, Long categoryId) {
-    var board = boardRepository.findById(boardId).orElseThrow();
-    var category = categoryRepository.findById(categoryId).orElseThrow();
+  public void deleteCategoryToBoard(Long boardId, Long categoryId) throws JpaException {
+    var board = boardRepository.findById(boardId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
+            ErrorCode.CANNOT_FIND_BOARD.getCode()));
+    var category = categoryRepository.findById(categoryId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_CATEGORY.getMsg(),
+            ErrorCode.CANNOT_FIND_CATEGORY.getCode()));
 
     var boardCategory = boardCategoryRepository.findByBoardAndCategory(board, category);
     boardCategoryRepository.delete(boardCategory);
@@ -110,9 +130,10 @@ public class BoardService {
    * @return
    * @throws Exception
    */
-  public List<BoardDto> getBoardListByCategory(Long categoryId) throws Exception {
+  public List<BoardDto> getBoardListByCategory(Long categoryId) throws JpaException {
     Category category = categoryRepository.findById(categoryId)
-        .orElseThrow(() -> new Exception("Cannot find cateogry by category id"));
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_CATEGORY.getMsg(),
+            ErrorCode.CANNOT_FIND_CATEGORY.getCode()));
     List<BoardCategory> getBoardList = boardCategoryRepository.findByCategory(category);
     List<BoardDto> resultList = new ArrayList<>();
     for (BoardCategory board : getBoardList) {
