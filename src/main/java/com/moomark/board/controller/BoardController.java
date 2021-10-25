@@ -1,7 +1,8 @@
 package com.moomark.board.controller;
 
 import java.util.List;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,19 +28,19 @@ public class BoardController {
    * =================================== GET ===================================
    */
   @GetMapping("/board/{boardId}/content")
-  public BoardDto getBoardInfoById(@PathVariable("boardId") Long boardId) {
-    return boardService.getBoardInfoById(boardId);
+  public ResponseEntity<BoardDto> getBoardInfoById(@PathVariable("boardId") Long boardId) {
+    return new ResponseEntity<>(boardService.getBoardInfoById(boardId), HttpStatus.OK);
   }
 
   @GetMapping("/board/{boardId}/info")
-  public RequestTotalBoardInfo getTotalBoardInfoById(@PathVariable("boardId") Long boardId)
+  public ResponseEntity<RequestTotalBoardInfo> getTotalBoardInfoById(@PathVariable("boardId") Long boardId)
       throws Exception {
     RequestTotalBoardInfo result = new RequestTotalBoardInfo();
     result.setBoardInfo(boardService.getBoardInfoById(boardId));
     result.setTotalCommentCount(commentService.getCommentCountByBoardId(boardId));
     result.setCommentList(commentService.getCommentByBoardId(boardId));
-
-    return result;
+    
+    return new ResponseEntity<> (result, HttpStatus.OK);
   }
 
   /*
@@ -51,8 +52,10 @@ public class BoardController {
   }
 
   @DeleteMapping("/board/{boardId}")
-  public void deleteBoardInfoById(@PathVariable("boardId") Long boardId) {
+  public ResponseEntity<Integer> deleteBoardInfoById(@PathVariable("boardId") Long boardId) {
     boardService.deleteBoard(boardId);
+
+    return new ResponseEntity<>(0, HttpStatus.OK);
   }
 
   /*
