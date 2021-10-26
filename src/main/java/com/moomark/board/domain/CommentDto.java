@@ -10,10 +10,10 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class CommentDto {
-	private Long id;
-	private Long userId;
-	private Long boardId;
-	private Long parentsId;
-	private List<Long> childIdList;
-	private String content;
+  private Long id;
+  private Long userId;
+  private Long boardId;
+  private Long parentsId;
+  private List<Long> childIdList;
+  private String content;
 }

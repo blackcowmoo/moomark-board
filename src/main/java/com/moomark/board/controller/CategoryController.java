@@ -1,5 +1,7 @@
 package com.moomark.board.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.moomark.board.domain.CategoryDto;
 import com.moomark.board.exception.JpaException;
+import com.moomark.board.service.BoardService;
 import com.moomark.board.service.CategoryService;
 
 import lombok.Data;
@@ -19,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryController {
   private final CategoryService categoryService;
+  private final BoardService boardService;
 
   /* static class */
   @Data
@@ -33,10 +37,17 @@ public class CategoryController {
     Long childId;
   }
 
+  @Data
+  static class RequestAddCategoryToBoard {
+    Long boardId;
+    Long categoryId;
+  }
+
   /* Get */
   @GetMapping("/category/{id}")
-  public CategoryDto getCategoryInfo(@PathVariable("id") Long categoryId) throws JpaException {
-    return categoryService.getCategoryById(categoryId);
+  public ResponseEntity<CategoryDto> getCategoryInfo(@PathVariable("id") Long categoryId)
+      throws JpaException {
+    return new ResponseEntity<>(categoryService.getCategoryById(categoryId), HttpStatus.OK);
   }
 
   /* Post */
@@ -46,8 +57,17 @@ public class CategoryController {
   }
 
   @PostMapping("/category/child")
-  public void addChildCategory(@RequestBody RequestChildCategory request) throws JpaException {
+  public ResponseEntity<String> addChildCategory(@RequestBody RequestChildCategory request)
+      throws JpaException {
     categoryService.addChildCategory(request.parentId, request.childId);
+    return new ResponseEntity<>("Success to add child category", HttpStatus.OK);
+  }
+
+  @PostMapping("/category/mapping")
+  public void addCategoryToBoard(@RequestBody RequestAddCategoryToBoard requestInformation)
+      throws JpaException {
+    boardService.addCategoryToBoard(requestInformation.getBoardId(),
+        requestInformation.getCategoryId());
   }
 
   /* Put */
