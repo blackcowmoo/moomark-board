@@ -9,13 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.moomark.board.domain.Board;
 import com.moomark.board.domain.BoardCategory;
 import com.moomark.board.domain.BoardDto;
+import com.moomark.board.domain.BoardTag;
 import com.moomark.board.domain.Category;
+import com.moomark.board.domain.Tag;
 import com.moomark.board.exception.ErrorCode;
 import com.moomark.board.exception.JpaException;
 import com.moomark.board.repository.BoardCategoryRepository;
 import com.moomark.board.repository.BoardRepository;
+import com.moomark.board.repository.BoardTagRepository;
 import com.moomark.board.repository.CategoryRepository;
-
+import com.moomark.board.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,6 +31,8 @@ public class BoardService {
   private final BoardRepository boardRepository;
   private final CategoryRepository categoryRepository;
   private final BoardCategoryRepository boardCategoryRepository;
+  private final TagRepository tagRepository;
+  private final BoardTagRepository boardTagRepository;
 
   public Long saveBoard(BoardDto boardDto) {
     log.info("add Board : {}", boardDto);
@@ -140,9 +145,79 @@ public class BoardService {
       resultList.add(BoardDto.builder().id(board.getBoard().getId())
           .title(board.getBoard().getTitle()).authorId(board.getBoard().getAuthorId())
           .recommendCount(board.getBoard().getRecommendCount())
-          .viewsCount(board.getBoard().getViewsCount()).build());
+          .viewsCount(board.getBoard().getViewsCount())
+          .build());
     }
 
+    return resultList;
+  }
+
+  /**
+   * Add tag to board
+   * 
+   * @param boardId
+   * @param tagid
+   */
+  public void addTagToBoard(Long boardId, Long tagId) throws JpaException {
+    Board board = boardRepository.findById(boardId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
+            ErrorCode.CANNOT_FIND_BOARD.getCode()));
+
+    Tag tag = tagRepository.findById(tagId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),
+            ErrorCode.CANNOT_FIND_TAG_INFORMATION.getCode()));
+
+    boardTagRepository.save(BoardTag.builder().board(board).tag(tag).build());
+  }
+
+  /**
+   * delete tag to board
+   * 
+   * @param boardId
+   * @param tagId
+   * @throws JpaException
+   */
+  public void deleteTagToBoard(Long boardId, Long tagId) throws JpaException {
+    Board board = boardRepository.findById(boardId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
+            ErrorCode.CANNOT_FIND_BOARD.getCode()));
+
+    Tag tag = tagRepository.findById(tagId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),
+            ErrorCode.CANNOT_FIND_TAG_INFORMATION.getCode()));
+
+    BoardTag boardTag = boardTagRepository.findByBoardAndTag(board, tag)
+        .orElseThrow(() -> new JpaException(ErrorCode.DOES_NOT_MATCH_BOARD_AND_TAG.getMsg(),
+            ErrorCode.DOES_NOT_MATCH_BOARD_AND_TAG.getCode()));
+
+    boardTagRepository.delete(boardTag);
+  }
+  
+  /**
+   * Get Board information by tag
+   * @param tagId
+   * @return
+   * @throws JpaException
+   */
+  public List<BoardDto> getBoardInfoByTag(Long tagId) throws JpaException {
+    Tag tag = tagRepository.findById(tagId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),
+            ErrorCode.CANNOT_FIND_TAG_INFORMATION.getCode()));
+    
+    List<BoardTag> boardList = boardTagRepository.findByTag(tag);
+    List<BoardDto> resultList = new ArrayList<>();
+    for(BoardTag boardTag : boardList) {
+      Board board = boardTag.getBoard();
+      resultList.add(BoardDto.builder()
+          .id(board.getId())
+          .authorId(board.getAuthorId())
+          .title(board.getTitle())
+          .viewsCount(board.getViewsCount())
+          .recommendCount(board.getRecommendCount())
+          .uploadTime(board.getUploadTime())
+          .build());
+    }
+    
     return resultList;
   }
 }

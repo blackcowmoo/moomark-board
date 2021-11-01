@@ -30,4 +30,6 @@ public class BoardDto {
 	private LocalDateTime uploadTime;
 	
 	private List<CategoryDto> categories;
+	
+	private List<TagDto> tags; 
 }
