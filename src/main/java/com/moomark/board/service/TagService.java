@@ -26,6 +26,7 @@ public class TagService {
    * @param information
    * @return
    */
+  @Transactional
   public Long addTag(String information) {
     var tag = Tag.builder().information(information).build();
 
@@ -39,6 +40,7 @@ public class TagService {
    * @param id
    * @throws JpaException
    */
+  @Transactional
   public void deleteTag(Long id) throws JpaException {
     var tag = tagRepository.findById(id)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),

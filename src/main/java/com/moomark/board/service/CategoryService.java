@@ -1,6 +1,7 @@
 package com.moomark.board.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.moomark.board.domain.Category;
 import com.moomark.board.domain.CategoryDto;
 import com.moomark.board.exception.ErrorCode;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CategoryService {
   private final CategoryRepository categoryRepository;
 
@@ -37,6 +39,7 @@ public class CategoryService {
    * @param information
    * @return
    */
+  @Transactional
   public Long addCategory(String information) {
     var category = Category.builder().type(information).build();
 
@@ -50,6 +53,7 @@ public class CategoryService {
    * @param information
    * @throws Exception
    */
+  @Transactional
   public void updateCategory(Long categoryId, String information) throws JpaException {
     Category category = categoryRepository.findById(categoryId)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_CATEGORY.getMsg(),
@@ -63,8 +67,13 @@ public class CategoryService {
    * 
    * @param id
    */
-  public void deleteCategory(Long id) {
-    categoryRepository.deleteById(id);
+  @Transactional
+  public void deleteCategory(Long id) throws JpaException{
+    Category category = categoryRepository.findById(id)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_CATEGORY.getMsg(),
+            ErrorCode.CANNOT_FIND_CATEGORY.getCode()));
+    
+    categoryRepository.deleteById(category.getId());
   }
 
   /**
@@ -74,6 +83,7 @@ public class CategoryService {
    * @param childId
    * @throws JpaException
    */
+  @Transactional
   public void addChildCategory(Long parentId, Long childId) throws JpaException {
     var parentCategory = categoryRepository.findById(parentId)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_PARENT_CATEGORY.getMsg(),
@@ -94,6 +104,7 @@ public class CategoryService {
    * @return
    * @throws Exception
    */
+  @Transactional
   public boolean deleteChildCategory(Long parentId, Long childId) throws JpaException {
 
     var parentCategory = categoryRepository.findById(parentId)
@@ -103,6 +114,7 @@ public class CategoryService {
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_CHILD_CATEGORY.getMsg(),
             ErrorCode.CANNOT_FIND_CHILD_CATEGORY.getCode()));
     parentCategory.removeChildCategory(childCategory);
+
     return true;
   }
 

@@ -119,6 +119,7 @@ public class CommentService {
    * 
    * @return
    */
+  @Transactional
   public Long saveComment(CommentDto commentDto) {
     Comment comment =
         Comment.builder().content(commentDto.getContent()).userId(commentDto.getUserId()).build();
@@ -131,6 +132,7 @@ public class CommentService {
    * @param id
    * @return
    */
+  @Transactional
   public Boolean deleteComment(Long id) {
     try {
       var comment = commentRepository.findById(id)

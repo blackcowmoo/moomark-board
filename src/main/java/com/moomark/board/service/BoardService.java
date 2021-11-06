@@ -34,6 +34,7 @@ public class BoardService {
   private final TagRepository tagRepository;
   private final BoardTagRepository boardTagRepository;
 
+  @Transactional
   public Long saveBoard(BoardDto boardDto) {
     log.info("add Board : {}", boardDto);
 
@@ -49,6 +50,7 @@ public class BoardService {
    * @param boardId
    * @throws JpaException
    */
+  @Transactional
   public void deleteBoard(Long boardId) throws JpaException {
     var board = boardRepository.findById(boardId)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
@@ -101,6 +103,7 @@ public class BoardService {
    * @param categoryId
    * @throws JpaException
    */
+  @Transactional
   public void addCategoryToBoard(Long boardId, Long categoryId) throws JpaException {
     var board = boardRepository.findById(boardId)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg()));
@@ -116,6 +119,7 @@ public class BoardService {
    * @param categoryId
    * @throws JpaException
    */
+  @Transactional
   public void deleteCategoryToBoard(Long boardId, Long categoryId) throws JpaException {
     var board = boardRepository.findById(boardId)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
@@ -158,6 +162,7 @@ public class BoardService {
    * @param boardId
    * @param tagid
    */
+  @Transactional
   public void addTagToBoard(Long boardId, Long tagId) throws JpaException {
     Board board = boardRepository.findById(boardId)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
@@ -177,6 +182,7 @@ public class BoardService {
    * @param tagId
    * @throws JpaException
    */
+  @Transactional
   public void deleteTagToBoard(Long boardId, Long tagId) throws JpaException {
     Board board = boardRepository.findById(boardId)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
