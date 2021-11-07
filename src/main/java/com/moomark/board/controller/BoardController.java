@@ -25,6 +25,8 @@ public class BoardController {
   private final BoardService boardService;
   private final CommentService commentService;
 
+  
+  // TODO : Comment, Tag 기능 추가 필요
   /*
    * =================================== GET ===================================
    */
