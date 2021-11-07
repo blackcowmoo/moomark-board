@@ -19,6 +19,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Entity
 @Getter
@@ -33,6 +34,7 @@ public class Category {
 	@OneToMany(mappedBy = "category")
 	private List<BoardCategory> board;
 	
+	@NonNull
 	private String categoryType;
 	
 	@JoinColumn(name = "parent_id")

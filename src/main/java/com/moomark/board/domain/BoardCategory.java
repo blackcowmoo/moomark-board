@@ -15,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Entity
 @Getter
@@ -26,11 +27,13 @@ public class BoardCategory {
   private Long id;
 
 
-  @JoinColumn(name = "board_id")
+  @NonNull
+  @JoinColumn(name = "board_id", nullable = false)
   @ManyToOne(fetch = FetchType.LAZY)
   private Board board;
 
 
+  @NonNull
   @JoinColumn(name = "category_id")
   @ManyToOne(fetch = FetchType.LAZY)
   private Category category;

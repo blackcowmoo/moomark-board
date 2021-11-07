@@ -19,6 +19,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Entity
 @Getter
@@ -30,27 +31,41 @@ public class Board {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NonNull
   @Column(name = "author_id")
   private Long authorId;
 
+  @NonNull
   @Column(name = "recommend_count")
   private Long recommendCount;
 
+  @NonNull
   @Column(name = "views_count")
   private Long viewsCount;
 
+  @NonNull
   @Column(name = "title")
   private String title;
 
+  @NonNull
   @Column(name = "content")
   private String content;
 
+  @NonNull
   @Column(name = "upload_time")
   private LocalDateTime uploadTime;
 
   @Column(name = "category_id")
   @OneToMany(mappedBy = "board")
   private List<BoardCategory> boardCategory = new ArrayList<>();
+  
+  @Column(name = "comment_id")
+  @OneToMany(mappedBy = "comment")
+  private List<BoardComment> boardComment = new ArrayList<>();
+  
+  @Column(name = "tag_id")
+  @OneToMany(mappedBy = "tag")
+  private List<BoardTag> boardTag = new ArrayList<>();
 
   @Builder
   public Board(Long authorId, String title, String content) {

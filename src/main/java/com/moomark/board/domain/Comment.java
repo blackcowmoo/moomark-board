@@ -21,6 +21,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 
 @Entity
@@ -37,9 +38,11 @@ public class Comment {
 	@OneToMany(mappedBy = "comment")
 	private List<BoardComment> board;
 	
+	@NonNull
 	@Column(name = "user_id")
 	private Long userId;
 	
+	@NonNull
 	@Column(name = "content")
 	private String content;
 	

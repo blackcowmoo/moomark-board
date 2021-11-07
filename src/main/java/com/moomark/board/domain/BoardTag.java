@@ -15,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 
 @Entity
@@ -26,10 +27,12 @@ public class BoardTag {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NonNull
 	@JoinColumn(name = "board_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Board board;
 	
+	@NonNull
 	@JoinColumn(name = "comment_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Tag tag;
