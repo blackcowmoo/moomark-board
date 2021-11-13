@@ -30,12 +30,24 @@ public class BoardController {
   /*
    * =================================== GET ===================================
    */
+  /**
+   * 게시판 정보 전달
+   * @param boardId
+   * @return
+   * @throws JpaException
+   */
   @GetMapping("/board/{boardId}/content")
   public ResponseEntity<BoardDto> getBoardInfoById(@PathVariable("boardId") Long boardId)
       throws JpaException {
     return new ResponseEntity<>(boardService.getBoardInfoById(boardId), HttpStatus.OK);
   }
 
+  /**
+   * ID 기반 게시글 종합 정보 조회
+   * @param boardId
+   * @return
+   * @throws Exception
+   */
   @GetMapping("/board/{boardId}/info")
   public ResponseEntity<RequestTotalBoardInfo> getTotalBoardInfoById(
       @PathVariable("boardId") Long boardId) throws Exception {

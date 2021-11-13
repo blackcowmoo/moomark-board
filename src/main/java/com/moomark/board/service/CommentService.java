@@ -12,6 +12,8 @@ import com.moomark.board.domain.Board;
 import com.moomark.board.domain.BoardComment;
 import com.moomark.board.domain.Comment;
 import com.moomark.board.domain.CommentDto;
+import com.moomark.board.exception.ErrorCode;
+import com.moomark.board.exception.JpaException;
 import com.moomark.board.repository.BoardCommentRepository;
 import com.moomark.board.repository.BoardRepository;
 import com.moomark.board.repository.CommentRepository;
@@ -27,6 +29,9 @@ public class CommentService {
   private final BoardRepository boardRepository;
   private final CommentRepository commentRepository;
   private final BoardCommentRepository boardCommentRepository;
+
+
+  /* GET */
 
   /**
    * Get comment list by board id
@@ -114,18 +119,31 @@ public class CommentService {
     return resultList;
   }
 
+  /** Save **/
+
   /**
    * save comment
    * 
    * @return
+   * @throws JpaException
    */
   @Transactional
-  public Long saveComment(CommentDto commentDto) {
-    Comment comment =
-        Comment.builder().content(commentDto.getContent()).userId(commentDto.getUserId()).build();
-    return commentRepository.save(comment).getId();
+  public Long saveComment(Long boardId, Long authorId, String comment) throws JpaException {
+    var board = boardRepository.findById(boardId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
+            ErrorCode.CANNOT_FIND_BOARD.getCode()));
+    Comment saveComment =
+        commentRepository.save(Comment.builder().userId(authorId).content(comment).build());
+    
+    boardCommentRepository.save(BoardComment.builder()
+        .board(board).comment(saveComment).build());
+    
+    log.info("author id : {} is left a comment on the bulletin board.", authorId);
+    return saveComment.getId();
   }
 
+
+  /** DELETE **/
   /**
    * delete comment
    * 

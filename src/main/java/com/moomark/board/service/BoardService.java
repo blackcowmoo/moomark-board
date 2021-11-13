@@ -34,6 +34,8 @@ public class BoardService {
   private final TagRepository tagRepository;
   private final BoardTagRepository boardTagRepository;
 
+
+  /** SAVE **/
   @Transactional
   public Long saveBoard(BoardDto boardDto) {
     log.info("add Board : {}", boardDto);
@@ -44,37 +46,43 @@ public class BoardService {
     return boardRepository.save(board).getId();
   }
 
+
   /**
-   * delete board by board id
+   * Save category to board
    * 
    * @param boardId
+   * @param categoryId
    * @throws JpaException
    */
   @Transactional
-  public void deleteBoard(Long boardId) throws JpaException {
+  public void saveCategoryToBoard(Long boardId, Long categoryId) throws JpaException {
     var board = boardRepository.findById(boardId)
-        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
-            ErrorCode.CANNOT_FIND_BOARD.getCode()));
-    boardRepository.delete(board);
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg()));
+    var category = categoryRepository.findById(categoryId).orElseThrow();
+
+    boardCategoryRepository.save(BoardCategory.builder().board(board).category(category).build());
   }
 
   /**
-   * Get board information by board id
+   * Add tag to board
    * 
-   * @param id
-   * @return
-   * @throws JpaException
+   * @param boardId
+   * @param tagid
    */
-  public BoardDto getBoardInfoById(Long id) throws JpaException {
-    var board = boardRepository.findById(id)
+  @Transactional
+  public void saveTagToBoard(Long boardId, Long tagId) throws JpaException {
+    Board board = boardRepository.findById(boardId)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
             ErrorCode.CANNOT_FIND_BOARD.getCode()));
-    board.upCountViewCount();
-    return BoardDto.builder().id(board.getId()).authorId(board.getAuthorId())
-        .content(board.getContent()).title(board.getTitle()).uploadTime(board.getUploadTime())
-        .recommendCount(board.getRecommendCount()).viewsCount(board.getViewsCount()).build();
+
+    Tag tag = tagRepository.findById(tagId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),
+            ErrorCode.CANNOT_FIND_TAG_INFORMATION.getCode()));
+
+    boardTagRepository.save(BoardTag.builder().board(board).tag(tag).build());
   }
 
+  /** GET **/
   /**
    * Get board Information by Title
    * 
@@ -96,20 +104,84 @@ public class BoardService {
     return boardDtoList;
   }
 
+
   /**
-   * Add category to board
+   * Get board information by board id
+   * 
+   * @param id
+   * @return
+   * @throws JpaException
+   */
+  public BoardDto getBoardInfoById(Long id) throws JpaException {
+    var board = boardRepository.findById(id)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
+            ErrorCode.CANNOT_FIND_BOARD.getCode()));
+    board.upCountViewCount();
+    return BoardDto.builder().id(board.getId()).authorId(board.getAuthorId())
+        .content(board.getContent()).title(board.getTitle()).uploadTime(board.getUploadTime())
+        .recommendCount(board.getRecommendCount()).viewsCount(board.getViewsCount()).build();
+  }
+
+  /**
+   * Get board list by category id
+   * 
+   * @param categoryId
+   * @return
+   * @throws Exception
+   */
+  public List<BoardDto> getBoardListByCategory(Long categoryId) throws JpaException {
+    Category category = categoryRepository.findById(categoryId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_CATEGORY.getMsg(),
+            ErrorCode.CANNOT_FIND_CATEGORY.getCode()));
+    List<BoardCategory> getBoardList = boardCategoryRepository.findByCategory(category);
+    List<BoardDto> resultList = new ArrayList<>();
+    for (BoardCategory board : getBoardList) {
+      resultList.add(BoardDto.builder().id(board.getBoard().getId())
+          .title(board.getBoard().getTitle()).authorId(board.getBoard().getAuthorId())
+          .recommendCount(board.getBoard().getRecommendCount())
+          .viewsCount(board.getBoard().getViewsCount()).build());
+    }
+
+    return resultList;
+  }
+
+  /**
+   * Get Board information by tag
+   * 
+   * @param tagId
+   * @return
+   * @throws JpaException
+   */
+  public List<BoardDto> getBoardInfoByTag(Long tagId) throws JpaException {
+    Tag tag = tagRepository.findById(tagId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),
+            ErrorCode.CANNOT_FIND_TAG_INFORMATION.getCode()));
+
+    List<BoardTag> boardList = boardTagRepository.findByTag(tag);
+    List<BoardDto> resultList = new ArrayList<>();
+    for (BoardTag boardTag : boardList) {
+      Board board = boardTag.getBoard();
+      resultList.add(BoardDto.builder().id(board.getId()).authorId(board.getAuthorId())
+          .title(board.getTitle()).viewsCount(board.getViewsCount())
+          .recommendCount(board.getRecommendCount()).uploadTime(board.getUploadTime()).build());
+    }
+
+    return resultList;
+  }
+
+  /** DELETE **/
+  /**
+   * delete board by board id
    * 
    * @param boardId
-   * @param categoryId
    * @throws JpaException
    */
   @Transactional
-  public void addCategoryToBoard(Long boardId, Long categoryId) throws JpaException {
+  public void deleteBoard(Long boardId) throws JpaException {
     var board = boardRepository.findById(boardId)
-        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg()));
-    var category = categoryRepository.findById(categoryId).orElseThrow();
-
-    boardCategoryRepository.save(BoardCategory.builder().board(board).category(category).build());
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
+            ErrorCode.CANNOT_FIND_BOARD.getCode()));
+    boardRepository.delete(board);
   }
 
   /**
@@ -132,48 +204,7 @@ public class BoardService {
     boardCategoryRepository.delete(boardCategory);
   }
 
-  /**
-   * Get board list by category id
-   * 
-   * @param categoryId
-   * @return
-   * @throws Exception
-   */
-  public List<BoardDto> getBoardListByCategory(Long categoryId) throws JpaException {
-    Category category = categoryRepository.findById(categoryId)
-        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_CATEGORY.getMsg(),
-            ErrorCode.CANNOT_FIND_CATEGORY.getCode()));
-    List<BoardCategory> getBoardList = boardCategoryRepository.findByCategory(category);
-    List<BoardDto> resultList = new ArrayList<>();
-    for (BoardCategory board : getBoardList) {
-      resultList.add(BoardDto.builder().id(board.getBoard().getId())
-          .title(board.getBoard().getTitle()).authorId(board.getBoard().getAuthorId())
-          .recommendCount(board.getBoard().getRecommendCount())
-          .viewsCount(board.getBoard().getViewsCount())
-          .build());
-    }
 
-    return resultList;
-  }
-
-  /**
-   * Add tag to board
-   * 
-   * @param boardId
-   * @param tagid
-   */
-  @Transactional
-  public void addTagToBoard(Long boardId, Long tagId) throws JpaException {
-    Board board = boardRepository.findById(boardId)
-        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
-            ErrorCode.CANNOT_FIND_BOARD.getCode()));
-
-    Tag tag = tagRepository.findById(tagId)
-        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),
-            ErrorCode.CANNOT_FIND_TAG_INFORMATION.getCode()));
-
-    boardTagRepository.save(BoardTag.builder().board(board).tag(tag).build());
-  }
 
   /**
    * delete tag to board
@@ -198,32 +229,5 @@ public class BoardService {
 
     boardTagRepository.delete(boardTag);
   }
-  
-  /**
-   * Get Board information by tag
-   * @param tagId
-   * @return
-   * @throws JpaException
-   */
-  public List<BoardDto> getBoardInfoByTag(Long tagId) throws JpaException {
-    Tag tag = tagRepository.findById(tagId)
-        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),
-            ErrorCode.CANNOT_FIND_TAG_INFORMATION.getCode()));
-    
-    List<BoardTag> boardList = boardTagRepository.findByTag(tag);
-    List<BoardDto> resultList = new ArrayList<>();
-    for(BoardTag boardTag : boardList) {
-      Board board = boardTag.getBoard();
-      resultList.add(BoardDto.builder()
-          .id(board.getId())
-          .authorId(board.getAuthorId())
-          .title(board.getTitle())
-          .viewsCount(board.getViewsCount())
-          .recommendCount(board.getRecommendCount())
-          .uploadTime(board.getUploadTime())
-          .build());
-    }
-    
-    return resultList;
-  }
+
 }

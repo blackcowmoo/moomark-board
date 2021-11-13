@@ -66,7 +66,7 @@ public class CategoryController {
   @PostMapping("/category/mapping")
   public void addCategoryToBoard(@RequestBody RequestAddCategoryToBoard requestInformation)
       throws JpaException {
-    boardService.addCategoryToBoard(requestInformation.getBoardId(),
+    boardService.saveCategoryToBoard(requestInformation.getBoardId(),
         requestInformation.getCategoryId());
   }
 
