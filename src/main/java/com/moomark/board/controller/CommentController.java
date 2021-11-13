@@ -1,6 +1,7 @@
 package com.moomark.board.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.moomark.board.exception.JpaException;
@@ -37,7 +38,7 @@ public class CommentController {
   }
 
   /* Put */
-  @PostMapping("board/comment")
+  @PutMapping("board/comment")
   public Long updateCommentToBoard(@RequestBody RequestComment requestComment) {
     return null;
   }
