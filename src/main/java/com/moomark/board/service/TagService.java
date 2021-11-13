@@ -1,5 +1,7 @@
 package com.moomark.board.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,15 +43,18 @@ public class TagService {
    * @throws JpaException
    */
   @Transactional
-  public void deleteTag(Long id) throws JpaException {
+  public Long deleteTag(Long id) throws JpaException {
     var tag = tagRepository.findById(id)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),
             ErrorCode.CANNOT_FIND_TAG_INFORMATION.getCode()));
-    tagRepository.deleteById(tag.getId());
+    Long deleteTagId = tag.getId();
+    tagRepository.deleteById(deleteTagId);
+    return deleteTagId;
   }
 
   /**
    * find tag information by tag id
+   * 
    * @param id
    * @return
    * @throws JpaException
@@ -60,7 +65,25 @@ public class TagService {
             ErrorCode.CANNOT_FIND_TAG_INFORMATION.getCode()));
     return TagDto.builder().id(tag.getId()).information(tag.getInformation()).build();
   }
-  
+
+  public List<TagDto> getTagInformationList() {
+    var tagList = tagRepository.findAll();
+    List<TagDto> resultList = new ArrayList<>();
+    for (Tag tag : tagList) {
+      resultList.add(TagDto.builder().id(tag.getId()).information(tag.getInformation()).build());
+    }
+    return resultList;
+  }
+
+
+  /**
+   * update tag information
+   * 
+   * @param id
+   * @param information
+   * @return
+   * @throws JpaException
+   */
   public Long updateTagById(Long id, String information) throws JpaException {
     var tag = tagRepository.findById(id)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),
