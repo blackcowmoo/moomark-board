@@ -60,4 +60,12 @@ public class TagService {
             ErrorCode.CANNOT_FIND_TAG_INFORMATION.getCode()));
     return TagDto.builder().id(tag.getId()).information(tag.getInformation()).build();
   }
+  
+  public Long updateTagById(Long id, String information) throws JpaException {
+    var tag = tagRepository.findById(id)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),
+            ErrorCode.CANNOT_FIND_TAG_INFORMATION.getCode()));
+    tag.updateInformation(information);
+    return tag.getId();
+  }
 }

@@ -40,4 +40,8 @@ public class Tag {
 	public Tag (String information) {
 		this.information = information;
 	}
+	
+	public void updateInformation(String information) {
+	  this.information = information;
+	}
 }

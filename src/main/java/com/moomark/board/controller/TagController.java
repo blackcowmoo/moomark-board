@@ -3,8 +3,10 @@ package com.moomark.board.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import com.moomark.board.exception.JpaException;
 import com.moomark.board.service.TagService;
 import com.moomark.board.util.StringUtils;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,19 @@ public class TagController {
   public ResponseEntity<Long> addTagInformation(@RequestBody String information) {
     information = StringUtils.removeSpecialCharacter(information);
     Long result = tagService.addTag(information.trim());
-    return new ResponseEntity<> (result, HttpStatus.OK);
+    return new ResponseEntity<>(result, HttpStatus.OK);
   }
+
   /* Put */
+  @PutMapping("tag/information")
+  public ResponseEntity<Long> updateTagInformation(@RequestBody Long tagId,
+      @RequestBody String information) throws JpaException {
+    information = StringUtils.removeSpecialCharacter(information);
+    Long result = tagService.updateTagById(tagId, information);
+    return new ResponseEntity<>(result, HttpStatus.OK);
+    
+  }
+
 
   /* Delete */
 }
