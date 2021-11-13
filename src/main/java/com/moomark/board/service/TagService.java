@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.moomark.board.domain.BoardTag;
 import com.moomark.board.domain.Tag;
 import com.moomark.board.domain.TagDto;
 import com.moomark.board.exception.ErrorCode;
 import com.moomark.board.exception.JpaException;
+import com.moomark.board.repository.BoardTagRepository;
 import com.moomark.board.repository.TagRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TagService {
 
   private final TagRepository tagRepository;
+  private final BoardTagRepository boardTagRepository;
 
   /**
    * Add
@@ -29,7 +31,7 @@ public class TagService {
    * @return
    */
   @Transactional
-  public Long addTag(String information) {
+  public Long saveTag(String information) {
     var tag = Tag.builder().information(information).build();
 
     log.info("Add information : {}", information);
@@ -47,6 +49,13 @@ public class TagService {
     var tag = tagRepository.findById(id)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),
             ErrorCode.CANNOT_FIND_TAG_INFORMATION.getCode()));
+
+    var boardTagList = boardTagRepository.findByTag(tag);
+    if (boardTagList.isEmpty()) {
+      throw new JpaException(ErrorCode.EXIST_MATCH_BOARD_AND_TAG.getMsg(),
+          ErrorCode.EXIST_MATCH_BOARD_AND_TAG.getCode());
+    }
+
     Long deleteTagId = tag.getId();
     tagRepository.deleteById(deleteTagId);
     return deleteTagId;
@@ -63,9 +72,15 @@ public class TagService {
     var tag = tagRepository.findById(id)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),
             ErrorCode.CANNOT_FIND_TAG_INFORMATION.getCode()));
+
     return TagDto.builder().id(tag.getId()).information(tag.getInformation()).build();
   }
 
+  /**
+   * get tag List
+   * 
+   * @return
+   */
   public List<TagDto> getTagInformationList() {
     var tagList = tagRepository.findAll();
     List<TagDto> resultList = new ArrayList<>();
@@ -84,6 +99,7 @@ public class TagService {
    * @return
    * @throws JpaException
    */
+  @Transactional
   public Long updateTagById(Long id, String information) throws JpaException {
     var tag = tagRepository.findById(id)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),

@@ -31,7 +31,7 @@ public class TagController {
   @PostMapping("tag/information")
   public ResponseEntity<Long> addTagInformation(@RequestBody String information) {
     information = StringUtils.removeSpecialCharacter(information);
-    Long result = tagService.addTag(information.trim());
+    Long result = tagService.saveTag(information.trim());
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
