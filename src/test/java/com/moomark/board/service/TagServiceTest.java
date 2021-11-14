@@ -14,8 +14,6 @@ import com.moomark.board.domain.TagDto;
 import com.moomark.board.exception.JpaException;
 import com.moomark.board.repository.TagRepository;
 
-// @RestClientTest(TagService.class)
-
 @ExtendWith(MockitoExtension.class)
 class TagServiceTest {
   @Mock
