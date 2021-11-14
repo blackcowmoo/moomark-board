@@ -7,7 +7,12 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class TagDto {
-	private Long id;
-	private String information;
+public class TagDto implements DtoInterface<Tag> {
+  private Long id;
+  private String information;
+
+  @Override
+  public Tag toEntity() {
+    return Tag.builder().information(this.information).build();
+  }
 }

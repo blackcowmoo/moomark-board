@@ -30,11 +30,9 @@ public class TagService {
    * @return
    */
   @Transactional
-  public Long saveTag(String information) {
-    var tag = Tag.builder().information(information).build();
-
-    log.info("Add information : {}", information);
-    return tagRepository.save(tag).getId();
+  public Long saveTag(TagDto tag) {
+    log.info("Add information : {}", tag.getInformation());
+    return tagRepository.save(tag.toEntity()).getId();
   }
 
   /**
@@ -72,6 +70,21 @@ public class TagService {
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),
             ErrorCode.CANNOT_FIND_TAG_INFORMATION.getCode()));
 
+    return TagDto.builder().id(tag.getId()).information(tag.getInformation()).build();
+  }
+  
+  /**
+   * find tag information by tag information
+   * 
+   * @param id
+   * @return
+   * @throws JpaException
+   */
+  public TagDto findTagByInformation(String information) throws JpaException {
+    var tag = tagRepository.findByInformation(information)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_TAG_INFORMATION.getMsg(),
+            ErrorCode.CANNOT_FIND_TAG_INFORMATION.getCode()));
+    
     return TagDto.builder().id(tag.getId()).information(tag.getInformation()).build();
   }
 

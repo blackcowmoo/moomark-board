@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BoardDto {
+public class BoardDto implements DtoInterface<Board>{
 	private Long id;
 	
 	private Long authorId;
@@ -31,5 +31,14 @@ public class BoardDto {
 	
 	private List<CategoryDto> categories;
 	
-	private List<TagDto> tags; 
+	private List<TagDto> tags;
+
+  @Override
+  public Board toEntity() {
+    return Board.builder()
+        .authorId(this.authorId)
+        .title(this.title)
+        .content(this.content)
+        .build();
+  } 
 }
