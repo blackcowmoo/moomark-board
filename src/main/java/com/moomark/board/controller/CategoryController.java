@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.moomark.board.domain.CategoryDto;
+import com.moomark.board.dto.CategoryDto;
 import com.moomark.board.exception.JpaException;
 import com.moomark.board.service.BoardService;
 import com.moomark.board.service.CategoryService;

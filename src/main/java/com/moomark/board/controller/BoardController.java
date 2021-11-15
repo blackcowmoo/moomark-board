@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.moomark.board.domain.BoardDto;
-import com.moomark.board.domain.CommentDto;
+import com.moomark.board.dto.BoardDto;
+import com.moomark.board.dto.CommentDto;
 import com.moomark.board.exception.JpaException;
 import com.moomark.board.service.BoardService;
 import com.moomark.board.service.CommentService;
@@ -26,12 +26,12 @@ public class BoardController {
   private final CommentService commentService;
 
   
-  // TODO : Comment, Tag 기능 추가 필요
+  // TODO : Comment, Tag 湲곕뒫 異붽� �븘�슂
   /*
    * =================================== GET ===================================
    */
   /**
-   * 게시판 정보 전달
+   * 寃뚯떆�뙋 �젙蹂� �쟾�떖
    * @param boardId
    * @return
    * @throws JpaException
@@ -43,7 +43,7 @@ public class BoardController {
   }
 
   /**
-   * ID 기반 게시글 종합 정보 조회
+   * ID 湲곕컲 寃뚯떆湲� 醫낇빀 �젙蹂� 議고쉶
    * @param boardId
    * @return
    * @throws Exception

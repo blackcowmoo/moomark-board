@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.moomark.board.domain.Tag;
-import com.moomark.board.domain.TagDto;
+import com.moomark.board.dto.TagDto;
 import com.moomark.board.exception.ErrorCode;
 import com.moomark.board.exception.JpaException;
 import com.moomark.board.repository.BoardTagRepository;

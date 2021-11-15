@@ -3,7 +3,7 @@ package com.moomark.board.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.moomark.board.domain.Category;
-import com.moomark.board.domain.CategoryDto;
+import com.moomark.board.dto.CategoryDto;
 import com.moomark.board.exception.ErrorCode;
 import com.moomark.board.exception.JpaException;
 import com.moomark.board.repository.CategoryRepository;

@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.moomark.board.domain.Board;
 import com.moomark.board.domain.BoardCategory;
-import com.moomark.board.domain.BoardDto;
 import com.moomark.board.domain.BoardTag;
 import com.moomark.board.domain.Category;
 import com.moomark.board.domain.Tag;
+import com.moomark.board.dto.BoardDto;
 import com.moomark.board.exception.ErrorCode;
 import com.moomark.board.exception.JpaException;
 import com.moomark.board.repository.BoardCategoryRepository;
@@ -43,7 +43,7 @@ public class BoardService {
     var board = Board.builder().title(boardDto.getTitle()).authorId(boardDto.getAuthorId())
         .content(boardDto.getContent()).build();
 
-    return boardRepository.save(board).getId();
+    return boardRepository.save(boardDto.toEntity()).getId();
   }
 
 

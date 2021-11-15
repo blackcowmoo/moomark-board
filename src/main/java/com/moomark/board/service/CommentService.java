@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.moomark.board.domain.Board;
 import com.moomark.board.domain.BoardComment;
 import com.moomark.board.domain.Comment;
-import com.moomark.board.domain.CommentDto;
+import com.moomark.board.dto.CommentDto;
 import com.moomark.board.exception.ErrorCode;
 import com.moomark.board.exception.JpaException;
 import com.moomark.board.repository.BoardCommentRepository;
@@ -134,10 +134,9 @@ public class CommentService {
             ErrorCode.CANNOT_FIND_BOARD.getCode()));
     Comment saveComment =
         commentRepository.save(Comment.builder().userId(authorId).content(comment).build());
-    
-    boardCommentRepository.save(BoardComment.builder()
-        .board(board).comment(saveComment).build());
-    
+
+    boardCommentRepository.save(BoardComment.builder().board(board).comment(saveComment).build());
+
     log.info("author id : {} is left a comment on the bulletin board.", authorId);
     return saveComment.getId();
   }

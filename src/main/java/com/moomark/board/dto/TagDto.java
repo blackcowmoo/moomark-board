@@ -1,5 +1,7 @@
-package com.moomark.board.domain;
+package com.moomark.board.dto;
 
+import com.moomark.board.domain.DtoInterface;
+import com.moomark.board.domain.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
