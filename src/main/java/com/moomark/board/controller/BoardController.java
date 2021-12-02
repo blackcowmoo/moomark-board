@@ -26,12 +26,12 @@ public class BoardController {
   private final CommentService commentService;
 
   
-  // TODO : Comment, Tag 湲곕뒫 異붽� �븘�슂
+  // TODO : Comment, Tag 기능 추가
   /*
    * =================================== GET ===================================
    */
   /**
-   * 寃뚯떆�뙋 �젙蹂� �쟾�떖
+   * get board information by board id
    * @param boardId
    * @return
    * @throws JpaException
@@ -43,7 +43,7 @@ public class BoardController {
   }
 
   /**
-   * ID 湲곕컲 寃뚯떆湲� 醫낇빀 �젙蹂� 議고쉶
+   * get board total information by board id
    * @param boardId
    * @return
    * @throws Exception
