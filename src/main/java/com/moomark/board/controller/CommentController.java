@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.moomark.board.exception.JpaException;
-import com.moomark.board.service.BoardService;
 import com.moomark.board.service.CommentService;
 import lombok.Data;
 import lombok.NonNull;
@@ -15,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentController {
   private final CommentService commentService;
-  private final BoardService boardService;
 
   // TODO : Comment Controller 작성 필요
   /* static class */
