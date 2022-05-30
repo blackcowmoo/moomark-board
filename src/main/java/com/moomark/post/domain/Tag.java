@@ -23,19 +23,19 @@ import lombok.NoArgsConstructor;
 @EntityListeners(AuditingEntityListener.class)
 public class Tag {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@Column(name = "tag_information")
-	private String information;
-	
-	
-	@OneToMany(mappedBy = "tag")
-	private List<BoardTag> board;
-	
-	@Builder
-	public Tag (String information) {
-		this.information = information;
-	}
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  
+  @Column(name = "tag_information")
+  private String information;
+  
+  
+  @OneToMany(mappedBy = "tag")
+  private List<BoardTag> board;
+  
+  @Builder
+  public Tag (String information) {
+    this.information = information;
+  }
 }

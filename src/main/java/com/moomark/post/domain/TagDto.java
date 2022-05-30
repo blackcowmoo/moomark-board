@@ -8,6 +8,6 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class TagDto {
-	private Long id;
-	private String information;
+  private Long id;
+  private String information;
 }

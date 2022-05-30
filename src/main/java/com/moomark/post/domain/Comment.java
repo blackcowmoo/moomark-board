@@ -28,53 +28,53 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Comment {
-	
+  
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@OneToMany(mappedBy = "comment")
-	private List<BoardComment> board;
-	
-	@Column(name = "user_id")
-	private Long userId;
-	
-	@Column(name = "content")
-	private String content;
-	
-	@JoinColumn(name = "parent_id")
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Comment parent;
-	
-	@OneToMany(mappedBy = "parent")
-	private List<Comment> childList;
-	
-	@Builder
-	public Comment(Long userId, String content) {
-		this.userId = userId;
-		this.content = content;
-	}
-	
-	/**
-	 * Get parent comment id
-	 * @return
-	 */
-	public Long getParentId() {
-		return Optional.ofNullable(this.parent)
-				.map(Comment::getId)
-				.orElse((long) 0);
-	}
-	
-	/**
-	 * Get child comment list
-	 * @return
-	 */
-	public List<Long> getChildIdList() {
-		List<Long> result = new ArrayList<>();
-		for(Comment child : this.childList) {
-			result.add(child.getId());
-		}
-		return result;
-	}
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  
+  @OneToMany(mappedBy = "comment")
+  private List<BoardComment> board;
+  
+  @Column(name = "user_id")
+  private Long userId;
+  
+  @Column(name = "content")
+  private String content;
+  
+  @JoinColumn(name = "parent_id")
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Comment parent;
+  
+  @OneToMany(mappedBy = "parent")
+  private List<Comment> childList;
+  
+  @Builder
+  public Comment(Long userId, String content) {
+    this.userId = userId;
+    this.content = content;
+  }
+  
+  /**
+   * Get parent comment id
+   * @return
+   */
+  public Long getParentId() {
+    return Optional.ofNullable(this.parent)
+        .map(Comment::getId)
+        .orElse((long) 0);
+  }
+  
+  /**
+   * Get child comment list
+   * @return
+   */
+  public List<Long> getChildIdList() {
+    List<Long> result = new ArrayList<>();
+    for(Comment child : this.childList) {
+      result.add(child.getId());
+    }
+    return result;
+  }
 }

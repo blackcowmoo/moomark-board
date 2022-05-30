@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryDto {
-	private Long id;
-	
-	@Builder.Default
-	private Long parentsId = (long) 0;
-	
-	private String categoryType;
+  private Long id;
+  
+  @Builder.Default
+  private Long parentsId = (long) 0;
+  
+  private String categoryType;
 }

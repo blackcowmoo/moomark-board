@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '2.5.2'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+  id 'org.springframework.boot' version '2.5.2'
+  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+  id 'java'
 }
 
 group = 'moomark'
@@ -9,54 +9,54 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
 }
 
 compileJava.options.encoding = 'UTF-8'
 
 tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+  options.encoding = 'UTF-8'
 }
 
 repositories {
-	mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	
-	// add swagger
-	compileOnly 'io.springfox:springfox-swagger2:2.6.1'
-	compileOnly 'io.springfox:springfox-swagger-ui:2.6.1'
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  compileOnly 'org.projectlombok:lombok'
+  developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+  annotationProcessor 'org.projectlombok:lombok'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  
+  // add swagger
+  compileOnly 'io.springfox:springfox-swagger2:2.6.1'
+  compileOnly 'io.springfox:springfox-swagger-ui:2.6.1'
 }
 
 bootJar{
-    archiveFileName = 'moomark_board.jar'
-    archiveVersion = "0.0.1"
+  archiveFileName = 'moomark_board.jar'
+  archiveVersion = "0.0.1"
 }
 
 test {
-	useJUnitPlatform()
+  useJUnitPlatform()
 }
 
 apply plugin: 'checkstyle'
 
 checkstyle {
-	toolVersion = "8.26"
-	configFile = file("./checkstyle.xml") // 1.1.2 에서 작성한 checkstyle 파일 지정
-	reportsDir = file("${buildDir}/checkstyle-output") // 리포트 파일이 위치할 디렉토리 지정
+  toolVersion = "8.26"
+  configFile = file("./checkstyle.xml") // 1.1.2 에서 작성한 checkstyle 파일 지정
+  reportsDir = file("${buildDir}/checkstyle-output") // 리포트 파일이 위치할 디렉토리 지정
 }
 
 checkstyleMain {
-	reports {
-		xml.destination = file("${checkstyle.reportsDir}/checkstyle-report.xml") // 리포트 파일의 위치 및 파일명 지정
-	}
+  reports {
+    xml.destination = file("${checkstyle.reportsDir}/checkstyle-report.xml") // 리포트 파일의 위치 및 파일명 지정
+  }
 }

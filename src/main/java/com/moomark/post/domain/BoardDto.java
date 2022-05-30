@@ -15,19 +15,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BoardDto {
-	private Long id;
-	
-	private Long authorId;
-	
-	private Long recommendCount;
-	
-	private Long viewsCount;
-	
-	private String title;
-	
-	private String content;
-	
-	private LocalDateTime uploadTime;
-	
-	private List<CategoryDto> categories;
+  private Long id;
+  
+  private Long authorId;
+  
+  private Long recommendCount;
+  
+  private Long viewsCount;
+  
+  private String title;
+  
+  private String content;
+  
+  private LocalDateTime uploadTime;
+  
+  private List<CategoryDto> categories;
 }

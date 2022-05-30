@@ -26,65 +26,65 @@ import lombok.NoArgsConstructor;
 @EntityListeners(AuditingEntityListener.class)
 public class Category {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@OneToMany(mappedBy = "category")
-	private List<BoardCategory> board;
-	
-	private String categoryType;
-	
-	@JoinColumn(name = "parent_id")
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Category parent;
-	
-	@OneToMany(mappedBy = "parent")
-	private List<Category> childList;
-	
-	
-	@Builder
-	public Category(String type) {
-		this.categoryType = type;
-	}
-	
-	public void updateCategoryInfo(String categoryType) {
-		this.categoryType = categoryType;
-	}
-	
-	
-	/**
-	 * Add child category
-	 * @param childCategory
-	 */
-	public void addChildCategory(Category childCategory) {
-		childCategory.setParents(this);
-		this.childList.add(childCategory);
-	}
-	
-	/**
-	 * remove child id
-	 * @param category
-	 */
-	public void removeChildCategory(Category category) {
-		this.childList.remove(category);
-	}
-	
-	/**
-	 * Set parents category
-	 * @param category
-	 */
-	public void setParents(Category parentCategory) {
-		this.parent = parentCategory;
-	}
-	
-	/**
-	 * return parent id with check null
-	 * @return
-	 */
-	public Long getParentAfterNullCheck() {
-		return Optional.ofNullable(this.parent)
-				.map(Category::getId)
-				.orElse((long) 0);
-	}
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  
+  @OneToMany(mappedBy = "category")
+  private List<BoardCategory> board;
+  
+  private String categoryType;
+  
+  @JoinColumn(name = "parent_id")
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Category parent;
+  
+  @OneToMany(mappedBy = "parent")
+  private List<Category> childList;
+  
+  
+  @Builder
+  public Category(String type) {
+    this.categoryType = type;
+  }
+  
+  public void updateCategoryInfo(String categoryType) {
+    this.categoryType = categoryType;
+  }
+  
+  
+  /**
+   * Add child category
+   * @param childCategory
+   */
+  public void addChildCategory(Category childCategory) {
+    childCategory.setParents(this);
+    this.childList.add(childCategory);
+  }
+  
+  /**
+   * remove child id
+   * @param category
+   */
+  public void removeChildCategory(Category category) {
+    this.childList.remove(category);
+  }
+  
+  /**
+   * Set parents category
+   * @param category
+   */
+  public void setParents(Category parentCategory) {
+    this.parent = parentCategory;
+  }
+  
+  /**
+   * return parent id with check null
+   * @return
+   */
+  public Long getParentAfterNullCheck() {
+    return Optional.ofNullable(this.parent)
+        .map(Category::getId)
+        .orElse((long) 0);
+  }
 }
