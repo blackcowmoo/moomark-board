@@ -1,0 +1,101 @@
+name: github-actions/gradle/build
+on:
+  pull_request:
+    branches:
+      - develop
+
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    env:
+      MIN_TEST_COVERAGE: 1
+      ENVIRONMENT: dev
+      REDIS_CLUSTER_HOST: localhost
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ""
+      MYSQL_RO_HOSTNAME: localhost:3306
+      MYSQL_RW_HOSTNAME: localhost:3306
+      MYSQL_USERNAME: moomark
+      MYSQL_PASSWORD: 1q2w3e4r
+      MYSQL_DATABASE: moomark-post
+
+    services:
+      redis:
+        image: redis:6
+        ports:
+          - 6379:6379/tcp
+      mysql:
+        image: mysql:8.0.20
+        ports:
+          - 3306:3306/tcp
+        env:
+          MYSQL_DATABASE: moomark-post
+          MYSQL_USER: moomark
+          MYSQL_PASSWORD: 1q2w3e4r
+          MYSQL_ROOT_PASSWORD: 1q2w3e4r
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Verify MySql connection
+        env:
+          PORT: ${{ job.services.mysql.ports[3306] }}
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+            sleep 1
+          done
+      - uses: actions/cache@v2
+        with:
+          path: ~/.gradle
+          key: java-${{ hashFiles('build.gradle') }}
+
+      - name: Run build
+        run: ./gradlew build -x checkstyleMain -x test -x checkstyleTest --stacktrace
+
+      - name: Run test
+        run: ./gradlew test -x checkstyleMain -x checkstyleTest --stacktrace
+
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: junit Tests
+          path: ${{ github.workspace }}/build/test-results/test/**/*.xml
+          reporter: java-junit
+
+      - uses: izhangzhihao/delete-comment@master
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          delete_user_name: github-actions[bot]
+          issue_number: ${{ github.event.number }}
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: ${{ github.workspace }}/build/test-results/**/*.xml
+
+      - name: Add coverage to PR
+        id: coverage
+        uses: madrapps/jacoco-report@v1.2
+        if: always()
+        with:
+          paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: ${{ env.MIN_TEST_COVERAGE }}
+
+      - name: coverage
+        run: echo "$RESULT_COVERAGE < $COVERAGE" && [[ "$(echo $RESULT_COVERAGE | awk '{print $1*100}')" -gt "$(echo $COVERAGE | awk '{print $1*100}')" ]]
+        env:
+          COVERAGE: ${{ env.MIN_TEST_COVERAGE }}
+          RESULT_COVERAGE: ${{ steps.coverage.outputs.coverage-overall }}
