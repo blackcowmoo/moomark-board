@@ -1,23 +1,15 @@
-FROM adoptopenjdk/openjdk11 AS builder
-WORKDIR /app
+FROM alpine as base
 
-# COPY gradle file
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
+RUN apk add --no-cache openjdk11-jre
 
-RUN chmod +x ./gradlew; sync && ./gradlew
-RUN ./gradlew dependencies
+###########
+FROM base
 
-# COPY FILE
-COPY . .
+COPY ./build/libs/*.jar /spring/
+WORKDIR /spring
+RUN mv /spring/*.jar /spring/moomark.jar
 
-RUN ./gradlew clean build
-
-FROM adoptopenjdk/openjdk11
-WORKDIR /app
-
-COPY --from=builder /app/build/libs/moomark_board.jar moomark_board.jar
 EXPOSE 8080
-ENTRYPOINT [ "java", "-jar", "./moomark_board.jar" ]
+STOPSIGNAL SIGINT
+
+CMD ["java", "-jar", "moomark.jar"]
