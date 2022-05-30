@@ -38,11 +38,6 @@ dependencies {
   compileOnly 'io.springfox:springfox-swagger-ui:2.6.1'
 }
 
-bootJar{
-  archiveFileName = 'moomark_board.jar'
-  archiveVersion = "0.0.1"
-}
-
 test {
   useJUnitPlatform()
 }
