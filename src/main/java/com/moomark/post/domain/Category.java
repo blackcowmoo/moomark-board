@@ -52,36 +52,19 @@ public class Category {
     this.categoryType = categoryType;
   }
   
-  
-  /**
-   * Add child category
-   * @param childCategory
-   */
   public void addChildCategory(Category childCategory) {
     childCategory.setParents(this);
     this.childList.add(childCategory);
   }
-  
-  /**
-   * remove child id
-   * @param category
-   */
+
   public void removeChildCategory(Category category) {
     this.childList.remove(category);
   }
-  
-  /**
-   * Set parents category
-   * @param category
-   */
+
   public void setParents(Category parentCategory) {
     this.parent = parentCategory;
   }
-  
-  /**
-   * return parent id with check null
-   * @return
-   */
+
   public Long getParentAfterNullCheck() {
     return Optional.ofNullable(this.parent)
         .map(Category::getId)

@@ -1,6 +1,5 @@
 package com.moomark.post.domain;
 
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,8 +67,9 @@ public class Board {
   }
 
   public void downCountViewCount() {
-    if (0 < this.viewsCount)
+    if (0 < this.viewsCount) {
       this.viewsCount--;
+    }
   }
 
   public void updateInformation(String title, String content) {

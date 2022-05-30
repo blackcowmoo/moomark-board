@@ -28,13 +28,6 @@ public class CommentService {
   private final CommentRepository commentRepository;
   private final BoardCommentRepository boardCommentRepository;
 
-  /**
-   * Get comment list by board id
-   * 
-   * @param boardId
-   * @return
-   * @throws Exception
-   */
   public List<CommentDto> getCommentByBoardId(Long boardId) throws Exception {
     Board board = boardRepository.findById(boardId)
         .orElseThrow(() -> new Exception("No comment information was found by board id."));
@@ -50,14 +43,6 @@ public class CommentService {
     return resultList;
   }
 
-  /**
-   * Get comment list by page to board id
-   * 
-   * @param boardId
-   * @param pageNumber
-   * @return
-   * @throws Exception
-   */
   public List<CommentDto> getCommentByBoardId(Long boardId, int pageNumber) throws Exception {
     Board board = boardRepository.findById(boardId)
         .orElseThrow(() -> new Exception("No comment information was found by board id."));
@@ -75,13 +60,6 @@ public class CommentService {
     return resultList;
   }
 
-  /**
-   * Get comment count by board id
-   * 
-   * @param boardId
-   * @return
-   * @throws Exception
-   */
   public int getCommentCountByBoardId(Long boardId) throws Exception {
     Board board = boardRepository.findById(boardId)
         .orElseThrow(() -> new Exception("No board information was found by board id."));
@@ -89,13 +67,6 @@ public class CommentService {
     return boardCommentRepository.findByBoard(board).size();
   }
 
-  /**
-   * Get comment information by user id
-   * 
-   * @param userId
-   * @return
-   * @throws Exception
-   */
   public List<CommentDto> getCommentByUserId(Long boardId, Long userId) throws Exception {
     Board board = boardRepository.findById(boardId)
         .orElseThrow(() -> new Exception("No comment information was found by board id"));
@@ -114,23 +85,12 @@ public class CommentService {
     return resultList;
   }
 
-  /**
-   * save comment
-   * 
-   * @return
-   */
   public Long saveComment(CommentDto commentDto) {
     Comment comment =
         Comment.builder().content(commentDto.getContent()).userId(commentDto.getUserId()).build();
     return commentRepository.save(comment).getId();
   }
 
-  /**
-   * delete comment
-   * 
-   * @param id
-   * @return
-   */
   public Boolean deleteComment(Long id) {
     try {
       var comment = commentRepository.findById(id)

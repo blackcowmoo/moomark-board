@@ -38,12 +38,6 @@ public class BoardService {
     return boardRepository.save(board).getId();
   }
 
-  /**
-   * delete board by board id
-   * 
-   * @param boardId
-   * @throws JpaException
-   */
   public void deleteBoard(Long boardId) throws JpaException {
     var board = boardRepository.findById(boardId)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
@@ -51,13 +45,6 @@ public class BoardService {
     boardRepository.delete(board);
   }
 
-  /**
-   * Get board information by board id
-   * 
-   * @param id
-   * @return
-   * @throws JpaException
-   */
   public BoardDto getBoardInfoById(Long id) throws JpaException {
     var board = boardRepository.findById(id)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
@@ -68,12 +55,6 @@ public class BoardService {
         .recommendCount(board.getRecommendCount()).viewsCount(board.getViewsCount()).build();
   }
 
-  /**
-   * Get board Information by Title
-   * 
-   * @param title
-   * @return
-   */
   public List<BoardDto> getBoardInfoByTitle(String title) {
     var boardList = boardRepository.findByTitle(title);
     List<BoardDto> boardDtoList = new ArrayList<>();
@@ -89,13 +70,6 @@ public class BoardService {
     return boardDtoList;
   }
 
-  /**
-   * Add category to board
-   * 
-   * @param boardId
-   * @param categoryId
-   * @throws JpaException
-   */
   public void addCategoryToBoard(Long boardId, Long categoryId) throws JpaException {
     var board = boardRepository.findById(boardId)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg()));
@@ -104,13 +78,6 @@ public class BoardService {
     boardCategoryRepository.save(BoardCategory.builder().board(board).category(category).build());
   }
 
-  /**
-   * delete category to board
-   * 
-   * @param boardId
-   * @param categoryId
-   * @throws JpaException
-   */
   public void deleteCategoryToBoard(Long boardId, Long categoryId) throws JpaException {
     var board = boardRepository.findById(boardId)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
@@ -123,13 +90,6 @@ public class BoardService {
     boardCategoryRepository.delete(boardCategory);
   }
 
-  /**
-   * Get board list by category id
-   * 
-   * @param categoryId
-   * @return
-   * @throws Exception
-   */
   public List<BoardDto> getBoardListByCategory(Long categoryId) throws JpaException {
     Category category = categoryRepository.findById(categoryId)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_CATEGORY.getMsg(),

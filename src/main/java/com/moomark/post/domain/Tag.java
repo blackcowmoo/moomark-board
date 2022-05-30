@@ -35,7 +35,7 @@ public class Tag {
   private List<BoardTag> board;
   
   @Builder
-  public Tag (String information) {
+  public Tag(String information) {
     this.information = information;
   }
 }
