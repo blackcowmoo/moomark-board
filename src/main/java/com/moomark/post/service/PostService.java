@@ -40,15 +40,15 @@ public class PostService {
 
   public void deletePost(Long postId) throws JpaException {
     var post = postRepository.findById(postId)
-        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
-            ErrorCode.CANNOT_FIND_BOARD.getCode()));
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_POST.getMsg(),
+            ErrorCode.CANNOT_FIND_POST.getCode()));
     postRepository.delete(post);
   }
 
   public PostDto getPostInfoById(Long id) throws JpaException {
     var post = postRepository.findById(id)
-        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
-            ErrorCode.CANNOT_FIND_BOARD.getCode()));
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_POST.getMsg(),
+            ErrorCode.CANNOT_FIND_POST.getCode()));
     post.upCountViewCount();
     return PostDto.builder().id(post.getId()).authorId(post.getAuthorId())
         .content(post.getContent()).title(post.getTitle()).uploadTime(post.getUploadTime())
@@ -72,7 +72,7 @@ public class PostService {
 
   public void addCategoryToPost(Long postId, Long categoryId) throws JpaException {
     var post = postRepository.findById(postId)
-        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg()));
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_POST.getMsg()));
     var category = categoryRepository.findById(categoryId).orElseThrow();
 
     postCategoryRepository.save(PostCategory.builder().post(post).category(category).build());
@@ -80,8 +80,8 @@ public class PostService {
 
   public void deleteCategoryToPost(Long postId, Long categoryId) throws JpaException {
     var post = postRepository.findById(postId)
-        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_BOARD.getMsg(),
-            ErrorCode.CANNOT_FIND_BOARD.getCode()));
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_POST.getMsg(),
+            ErrorCode.CANNOT_FIND_POST.getCode()));
     var category = categoryRepository.findById(categoryId)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_CATEGORY.getMsg(),
             ErrorCode.CANNOT_FIND_CATEGORY.getCode()));
