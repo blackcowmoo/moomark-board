@@ -22,8 +22,7 @@ tasks.withType(JavaCompile) {
 }
 
 jar {
-   enabled = true
-   archiveClassifier = ''
+  enabled = false
 }
 
 repositories {
