@@ -1,2 +1,2 @@
-# moomark-board
+# moomark-post
  
