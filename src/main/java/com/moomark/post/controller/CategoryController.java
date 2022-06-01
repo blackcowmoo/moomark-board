@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.moomark.post.domain.CategoryDto;
 import com.moomark.post.exception.JpaException;
-import com.moomark.post.service.BoardService;
+import com.moomark.post.service.PostService;
 import com.moomark.post.service.CategoryService;
 
 import lombok.Data;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryController {
   private final CategoryService categoryService;
-  private final BoardService boardService;
+  private final PostService postService;
 
   /* static class */
   @Data
@@ -38,8 +38,8 @@ public class CategoryController {
   }
 
   @Data
-  static class RequestAddCategoryToBoard {
-    Long boardId;
+  static class RequestAddCategoryToPost {
+    Long postId;
     Long categoryId;
   }
 
@@ -64,9 +64,9 @@ public class CategoryController {
   }
 
   @PostMapping("/category/mapping")
-  public void addCategoryToBoard(@RequestBody RequestAddCategoryToBoard requestInformation)
+  public void addCategoryToPost(@RequestBody RequestAddCategoryToPost requestInformation)
       throws JpaException {
-    boardService.addCategoryToBoard(requestInformation.getBoardId(),
+    postService.addCategoryToPost(requestInformation.getPostId(),
         requestInformation.getCategoryId());
   }
 

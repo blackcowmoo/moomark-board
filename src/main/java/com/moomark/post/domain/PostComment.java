@@ -20,24 +20,24 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class BoardCategory {
+public class PostComment {
+  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-
-  @JoinColumn(name = "board_id")
+  
+  @JoinColumn(name = "post_id")
   @ManyToOne(fetch = FetchType.LAZY)
-  private Board board;
-
-
-  @JoinColumn(name = "category_id")
+  private Post post;
+  
+  @JoinColumn(name = "comment_id")
   @ManyToOne(fetch = FetchType.LAZY)
-  private Category category;
-
+  private Comment comment;
+  
   @Builder
-  public BoardCategory(Board board, Category category) {
-    this.board = board;
-    this.category = category;
+  public PostComment(Post post, Comment comment) {
+    this.post = post;
+    this.comment = comment;
   }
+
 }

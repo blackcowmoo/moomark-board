@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class Board {
+public class Post {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,11 +48,11 @@ public class Board {
   private LocalDateTime uploadTime;
 
   @Column(name = "category_id")
-  @OneToMany(mappedBy = "board")
-  private List<BoardCategory> boardCategory = new ArrayList<>();
+  @OneToMany(mappedBy = "post")
+  private List<PostCategory> postCategory = new ArrayList<>();
 
   @Builder
-  public Board(Long authorId, String title, String content) {
+  public Post(Long authorId, String title, String content) {
     this.authorId = authorId;
     this.title = title;
     this.content = content;

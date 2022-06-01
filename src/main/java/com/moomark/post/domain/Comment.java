@@ -35,7 +35,7 @@ public class Comment {
   private Long id;
   
   @OneToMany(mappedBy = "comment")
-  private List<BoardComment> board;
+  private List<PostComment> post;
   
   @Column(name = "user_id")
   private Long userId;
