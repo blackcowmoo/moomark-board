@@ -10,6 +10,6 @@ import lombok.RequiredArgsConstructor;
 public class HealthController {
   @GetMapping("/health")
   public String getCategoryInfo() {
-    return "OK"
+    return "OK";
   }
 }
