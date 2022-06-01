@@ -8,12 +8,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.moomark.post.domain.Board;
-import com.moomark.post.domain.BoardComment;
+import com.moomark.post.domain.Post;
+import com.moomark.post.domain.PostComment;
 import com.moomark.post.domain.Comment;
 import com.moomark.post.domain.CommentDto;
-import com.moomark.post.repository.BoardCommentRepository;
-import com.moomark.post.repository.BoardRepository;
+import com.moomark.post.repository.PostCommentRepository;
+import com.moomark.post.repository.PostRepository;
 import com.moomark.post.repository.CommentRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -24,18 +24,18 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CommentService {
-  private final BoardRepository boardRepository;
+  private final PostRepository postRepository;
   private final CommentRepository commentRepository;
-  private final BoardCommentRepository boardCommentRepository;
+  private final PostCommentRepository postCommentRepository;
 
-  public List<CommentDto> getCommentByBoardId(Long boardId) throws Exception {
-    Board board = boardRepository.findById(boardId)
-        .orElseThrow(() -> new Exception("No comment information was found by board id."));
+  public List<CommentDto> getCommentByPostId(Long postId) throws Exception {
+    Post post = postRepository.findById(postId)
+        .orElseThrow(() -> new Exception("No comment information was found by post id."));
 
-    List<BoardComment> boardCommentList = boardCommentRepository.findByBoard(board);
+    List<PostComment> postCommentList = postCommentRepository.findByPost(post);
     List<CommentDto> resultList = new ArrayList<>();
-    for (BoardComment boardComment : boardCommentList) {
-      Comment comment = boardComment.getComment();
+    for (PostComment postComment : postCommentList) {
+      Comment comment = postComment.getComment();
       CommentDto commentDto = CommentDto.builder().id(comment.getId()).content(comment.getContent())
           .parentsId(comment.getParentId()).build();
       resultList.add(commentDto);
@@ -43,15 +43,15 @@ public class CommentService {
     return resultList;
   }
 
-  public List<CommentDto> getCommentByBoardId(Long boardId, int pageNumber) throws Exception {
-    Board board = boardRepository.findById(boardId)
-        .orElseThrow(() -> new Exception("No comment information was found by board id."));
+  public List<CommentDto> getCommentByPostId(Long postId, int pageNumber) throws Exception {
+    Post post = postRepository.findById(postId)
+        .orElseThrow(() -> new Exception("No comment information was found by post id."));
 
     PageRequest pageRequest = PageRequest.of(pageNumber, 20);
-    Page<BoardComment> boardCommmentPage = boardCommentRepository.findByBoard(board, pageRequest);
+    Page<PostComment> postCommmentPage = postCommentRepository.findByPost(post, pageRequest);
     List<CommentDto> resultList = new ArrayList<>();
-    for (BoardComment boardComment : boardCommmentPage) {
-      Comment comment = boardComment.getComment();
+    for (PostComment postComment : postCommmentPage) {
+      Comment comment = postComment.getComment();
       CommentDto commentDto = CommentDto.builder().id(comment.getId()).content(comment.getContent())
           .parentsId(comment.getParentId()).build();
       resultList.add(commentDto);
@@ -60,22 +60,22 @@ public class CommentService {
     return resultList;
   }
 
-  public int getCommentCountByBoardId(Long boardId) throws Exception {
-    Board board = boardRepository.findById(boardId)
-        .orElseThrow(() -> new Exception("No board information was found by board id."));
+  public int getCommentCountByPostId(Long postId) throws Exception {
+    Post post = postRepository.findById(postId)
+        .orElseThrow(() -> new Exception("No post information was found by post id."));
 
-    return boardCommentRepository.findByBoard(board).size();
+    return postCommentRepository.findByPost(post).size();
   }
 
-  public List<CommentDto> getCommentByUserId(Long boardId, Long userId) throws Exception {
-    Board board = boardRepository.findById(boardId)
-        .orElseThrow(() -> new Exception("No comment information was found by board id"));
+  public List<CommentDto> getCommentByUserId(Long postId, Long userId) throws Exception {
+    Post post = postRepository.findById(postId)
+        .orElseThrow(() -> new Exception("No comment information was found by post id"));
 
-    List<BoardComment> boardCommentList = boardCommentRepository.findByBoard(board);
+    List<PostComment> postCommentList = postCommentRepository.findByPost(post);
 
     List<CommentDto> resultList = new ArrayList<>();
-    for (BoardComment boardComment : boardCommentList) {
-      Comment comment = boardComment.getComment();
+    for (PostComment postComment : postCommentList) {
+      Comment comment = postComment.getComment();
       if (comment.getUserId() == userId) {
         CommentDto commentDto = CommentDto.builder().id(comment.getId())
             .content(comment.getContent()).parentsId(comment.getParentId()).build();

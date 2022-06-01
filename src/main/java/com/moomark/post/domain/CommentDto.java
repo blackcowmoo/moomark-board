@@ -12,7 +12,7 @@ import lombok.Data;
 public class CommentDto {
   private Long id;
   private Long userId;
-  private Long boardId;
+  private Long postId;
   private Long parentsId;
   private List<Long> childIdList;
   private String content;

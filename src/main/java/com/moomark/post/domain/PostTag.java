@@ -21,22 +21,22 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class BoardTag {
+public class PostTag {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   
-  @JoinColumn(name = "board_id")
+  @JoinColumn(name = "post_id")
   @ManyToOne(fetch = FetchType.LAZY)
-  private Board board;
+  private Post post;
   
   @JoinColumn(name = "comment_id")
   @ManyToOne(fetch = FetchType.LAZY)
   private Tag tag;
   
   @Builder
-  public BoardTag(Board board, Tag tag) {
-    this.board = board;
+  public PostTag(Post post, Tag tag) {
+    this.post = post;
     this.tag = tag;
   }
 }

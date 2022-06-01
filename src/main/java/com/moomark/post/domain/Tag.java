@@ -32,7 +32,7 @@ public class Tag {
   
   
   @OneToMany(mappedBy = "tag")
-  private List<BoardTag> board;
+  private List<PostTag> post;
   
   @Builder
   public Tag(String information) {
