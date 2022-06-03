@@ -48,7 +48,7 @@ public class PostController {
   /*
    * =================================== POST ==================================
    */
-  @PostMapping("/post/new")
+  @PostMapping("/post")
   public Long savePostInfo(PostDto postDto) {
     return postService.savePost(postDto);
   }
