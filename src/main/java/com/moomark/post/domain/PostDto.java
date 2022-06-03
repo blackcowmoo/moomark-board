@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class PostDto {
   private Long id;
   
-  private Long authorId;
+  private String userId;
   
   private Long recommendCount;
   

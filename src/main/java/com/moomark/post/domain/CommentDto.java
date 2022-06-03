@@ -11,7 +11,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class CommentDto {
   private Long id;
-  private Long userId;
+  private String userId;
   private Long postId;
   private Long parentsId;
   private List<Long> childIdList;

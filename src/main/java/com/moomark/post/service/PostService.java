@@ -32,7 +32,7 @@ public class PostService {
   public Long savePost(PostDto postDto) {
     log.info("add Post : {}", postDto);
 
-    var post = Post.builder().title(postDto.getTitle()).authorId(postDto.getAuthorId())
+    var post = Post.builder().title(postDto.getTitle()).userId(postDto.getUserId())
         .content(postDto.getContent()).build();
 
     return postRepository.save(post).getId();
@@ -50,7 +50,7 @@ public class PostService {
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_POST.getMsg(),
             ErrorCode.CANNOT_FIND_POST.getCode()));
     post.upCountViewCount();
-    return PostDto.builder().id(post.getId()).authorId(post.getAuthorId())
+    return PostDto.builder().id(post.getId()).userId(post.getUserId())
         .content(post.getContent()).title(post.getTitle()).uploadTime(post.getUploadTime())
         .recommendCount(post.getRecommendCount()).viewsCount(post.getViewsCount()).build();
   }
@@ -60,7 +60,7 @@ public class PostService {
     List<PostDto> postDtoList = new ArrayList<>();
     for (Post post : postList) {
       var postDto =
-          PostDto.builder().id(post.getId()).title(post.getTitle()).authorId(post.getAuthorId())
+          PostDto.builder().id(post.getId()).title(post.getTitle()).userId(post.getUserId())
               .content(post.getContent()).uploadTime(post.getUploadTime())
               .viewsCount(post.getViewsCount()).recommendCount(post.getRecommendCount()).build();
       postDtoList.add(postDto);
@@ -98,7 +98,7 @@ public class PostService {
     List<PostDto> resultList = new ArrayList<>();
     for (PostCategory post : getPostList) {
       resultList.add(PostDto.builder().id(post.getPost().getId())
-          .title(post.getPost().getTitle()).authorId(post.getPost().getAuthorId())
+          .title(post.getPost().getTitle()).userId(post.getPost().getUserId())
           .recommendCount(post.getPost().getRecommendCount())
           .viewsCount(post.getPost().getViewsCount()).build());
     }
