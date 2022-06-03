@@ -9,7 +9,7 @@ import com.moomark.post.domain.Post;
 public interface PostRepository extends JpaRepository<Post, Long> {
   public List<Post> findByTitle(String title);
 
-  public List<Post> findByAuthorId(Long userId);
+  public List<Post> findByUserId(String userId);
 
   public Optional<Post> findById(Long id);
 }
