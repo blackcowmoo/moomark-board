@@ -38,7 +38,7 @@ public class Comment {
   private List<PostComment> post;
   
   @Column(name = "user_id")
-  private Long userId;
+  private String userId;
   
   @Column(name = "content")
   private String content;
@@ -51,7 +51,7 @@ public class Comment {
   private List<Comment> childList;
   
   @Builder
-  public Comment(Long userId, String content) {
+  public Comment(String userId, String content) {
     this.userId = userId;
     this.content = content;
   }

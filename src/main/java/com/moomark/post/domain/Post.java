@@ -29,8 +29,8 @@ public class Post {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "author_id")
-  private Long authorId;
+  @Column(name = "user_id")
+  private String userId;
 
   @Column(name = "recommend_count")
   private Long recommendCount;
@@ -52,8 +52,8 @@ public class Post {
   private List<PostCategory> postCategory = new ArrayList<>();
 
   @Builder
-  public Post(Long authorId, String title, String content) {
-    this.authorId = authorId;
+  public Post(String userId, String title, String content) {
+    this.userId = userId;
     this.title = title;
     this.content = content;
     this.recommendCount = (long) 0;

@@ -67,7 +67,7 @@ public class CommentService {
     return postCommentRepository.findByPost(post).size();
   }
 
-  public List<CommentDto> getCommentByUserId(Long postId, Long userId) throws Exception {
+  public List<CommentDto> getCommentByUserId(Long postId, String userId) throws Exception {
     Post post = postRepository.findById(postId)
         .orElseThrow(() -> new Exception("No comment information was found by post id"));
 
