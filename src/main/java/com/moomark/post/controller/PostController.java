@@ -57,7 +57,7 @@ public class PostController {
    */
   @PostMapping("/api/v1/post")
   public Post writePost(@RequestHeader HttpHeaders headers, HttpServletResponse response,
-      @RequestBody(required = true) String title, @RequestBody(required = true) String content) {
+      @RequestBody(required = true) PostDto body) {
     List<String> userIdHeaders = headers.get("x-moom-user-id");
     if (userIdHeaders.size() != 1) {
       response.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -65,7 +65,7 @@ public class PostController {
     }
 
     String userId = userIdHeaders.get(0);
-    return postService.savePost(userId, title, content);
+    return postService.savePost(userId, body.getTitle(), body.getContent());
   }
 
   @DeleteMapping("/post/{postId}")
