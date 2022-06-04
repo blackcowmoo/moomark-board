@@ -33,10 +33,13 @@ public class PostControllerTest {
     requestParams.put("title", testTitle);
     requestParams.put("content", testContent);
 
-    Post post = mapper.readValue(
-        mvc.perform(post("/api/v1/post").header("x-moom-user-id", "TEST@test").content(requestParams.toJSONString()))
-            .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(),
-        Post.class);
+    String result = mvc
+        .perform(post("/api/v1/post").header("x-moom-user-id", "TEST@test").content(requestParams.toJSONString()))
+        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+    Post post = mapper.readValue(result, Post.class);
+
+    assertEquals(result, "test");
 
     assertEquals(post.getTitle(), testTitle);
     assertEquals(post.getContent(), testContent);
