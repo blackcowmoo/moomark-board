@@ -17,9 +17,7 @@ import com.moomark.post.repository.PostRepository;
 import com.moomark.post.repository.CategoryRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -29,13 +27,12 @@ public class PostService {
   private final CategoryRepository categoryRepository;
   private final PostCategoryRepository postCategoryRepository;
 
-  public Long savePost(PostDto postDto) {
-    log.info("add Post : {}", postDto);
+  public Post savePost(PostDto postDto) {
+    return savePost(postDto.getUserId(), postDto.getTitle(), postDto.getContent());
+  }
 
-    var post = Post.builder().title(postDto.getTitle()).userId(postDto.getUserId())
-        .content(postDto.getContent()).build();
-
-    return postRepository.save(post).getId();
+  public Post savePost(String userId, String title, String content) {
+    return postRepository.save(Post.builder().title(title).userId(userId).content(content).build());
   }
 
   public void deletePost(Long postId) throws JpaException {
@@ -59,10 +56,9 @@ public class PostService {
     var postList = postRepository.findByTitle(title);
     List<PostDto> postDtoList = new ArrayList<>();
     for (Post post : postList) {
-      var postDto =
-          PostDto.builder().id(post.getId()).title(post.getTitle()).userId(post.getUserId())
-              .content(post.getContent()).uploadTime(post.getUploadTime())
-              .viewsCount(post.getViewsCount()).recommendCount(post.getRecommendCount()).build();
+      var postDto = PostDto.builder().id(post.getId()).title(post.getTitle()).userId(post.getUserId())
+          .content(post.getContent()).uploadTime(post.getUploadTime())
+          .viewsCount(post.getViewsCount()).recommendCount(post.getRecommendCount()).build();
       postDtoList.add(postDto);
 
     }

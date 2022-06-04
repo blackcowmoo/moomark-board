@@ -1,16 +1,22 @@
 package com.moomark.post.controller;
 
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moomark.post.domain.PostDto;
 import com.moomark.post.domain.CommentDto;
+import com.moomark.post.domain.Post;
 import com.moomark.post.exception.JpaException;
 import com.moomark.post.service.PostService;
 import com.moomark.post.service.CommentService;
@@ -48,9 +54,17 @@ public class PostController {
   /*
    * =================================== POST ==================================
    */
-  @PostMapping("/post")
-  public Long savePostInfo(PostDto postDto) {
-    return postService.savePost(postDto);
+  @PostMapping("/api/v1/post")
+  public Post writePost(@RequestHeader HttpHeaders headers, String title, String content,
+      HttpServletResponse response) {
+    List<String> userIdHeaders = headers.get("x-moom-user-id");
+    if (userIdHeaders.size() != 1) {
+      response.setStatus(401);
+      return null;
+    }
+
+    String userId = userIdHeaders.get(0);
+    return postService.savePost(userId, title, content);
   }
 
   @DeleteMapping("/post/{postId}")
