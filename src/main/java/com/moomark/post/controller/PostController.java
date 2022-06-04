@@ -60,7 +60,7 @@ public class PostController {
       @RequestBody(required = true) String title, @RequestBody(required = true) String content) {
     List<String> userIdHeaders = headers.get("x-moom-user-id");
     if (userIdHeaders.size() != 1) {
-      response.setStatus(401);
+      response.setStatus(HttpStatus.UNAUTHORIZED.value());
       return null;
     }
 
