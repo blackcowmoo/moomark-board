@@ -1,6 +1,7 @@
 package com.moomark.post.domain;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class Post {
     this.content = content;
     this.recommendCount = (long) 0;
     this.viewsCount = (long) 0;
-    this.uploadTime = LocalDateTime.now();
+    this.uploadTime = LocalDateTime.now(ZoneOffset.UTC);
   }
 
   /* Function List */

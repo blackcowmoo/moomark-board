@@ -56,8 +56,8 @@ public class PostController {
    * =================================== POST ==================================
    */
   @PostMapping("/api/v1/post")
-  public Post writePost(@RequestHeader HttpHeaders headers, @RequestBody String title, @RequestBody String content,
-      HttpServletResponse response) {
+  public Post writePost(@RequestHeader HttpHeaders headers, HttpServletResponse response,
+      @RequestBody(required = true) String title, @RequestBody(required = true) String content) {
     List<String> userIdHeaders = headers.get("x-moom-user-id");
     if (userIdHeaders.size() != 1) {
       response.setStatus(401);
