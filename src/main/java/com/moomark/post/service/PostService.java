@@ -34,7 +34,7 @@ public class PostService {
   private final CategoryRepository categoryRepository;
   private final PostCategoryRepository postCategoryRepository;
 
-  private final Integer MAX_LIMIT = 100; // Posts per page
+  private static final Integer MAX_LIMIT = 100; // Posts per page
 
   public Post savePost(PostDto postDto) {
     return savePost(postDto.getUserId(), postDto.getTitle(), postDto.getContent());
