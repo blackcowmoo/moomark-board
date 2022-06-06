@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.moomark.post.model.entity.Post;
@@ -18,7 +17,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
   public List<Post> findByIdGreaterThan(Long id, Pageable paging);
 
-  public List<Post> findByIdLessThan(Long id, Pageable paging, Sort sort);
+  public List<Post> findByIdLessThan(Long id, Pageable paging);
 
-  public List<Post> findByUserIdAndIdLessThan(String userId, Long id, Pageable paging, Sort sort);
+  public List<Post> findByUserIdAndIdLessThan(String userId, Long id, Pageable paging);
 }

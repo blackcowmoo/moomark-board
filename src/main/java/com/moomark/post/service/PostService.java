@@ -3,6 +3,7 @@ package com.moomark.post.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -136,13 +137,13 @@ public class PostService {
       switch (search.getKey()) {
         case USER_ID:
           return postRepository.findByUserIdAndIdLessThan(
-              search.getValue(), offset, Pageable.ofSize(limit), Sort.by(orders));
+              search.getValue(), offset, PageRequest.of(0, limit, Sort.by(orders)));
         default:
           break;
       }
     }
 
-    return postRepository.findByIdLessThan(offset, Pageable.ofSize(limit), Sort.by(orders));
+    return postRepository.findByIdLessThan(offset, PageRequest.of(0, limit, Sort.by(orders)));
   }
 
 }
