@@ -1,4 +1,4 @@
-package com.moomark.post.domain;
+package com.moomark.post.model.entity;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -57,8 +57,8 @@ public class Post {
     this.userId = userId;
     this.title = title;
     this.content = content;
-    this.recommendCount = (long) 0;
-    this.viewsCount = (long) 0;
+    this.recommendCount = 0L;
+    this.viewsCount = 0L;
     this.uploadTime = LocalDateTime.now(ZoneOffset.UTC);
   }
 

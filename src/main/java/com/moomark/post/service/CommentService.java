@@ -8,12 +8,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.moomark.post.domain.Post;
-import com.moomark.post.domain.PostComment;
-import com.moomark.post.domain.Comment;
-import com.moomark.post.domain.CommentDto;
 import com.moomark.post.repository.PostCommentRepository;
 import com.moomark.post.repository.PostRepository;
+import com.moomark.post.model.dto.CommentDto;
+import com.moomark.post.model.entity.Comment;
+import com.moomark.post.model.entity.Post;
+import com.moomark.post.model.entity.PostComment;
 import com.moomark.post.repository.CommentRepository;
 
 import lombok.RequiredArgsConstructor;

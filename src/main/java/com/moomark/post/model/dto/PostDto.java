@@ -1,4 +1,4 @@
-package com.moomark.post.domain;
+package com.moomark.post.model.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
