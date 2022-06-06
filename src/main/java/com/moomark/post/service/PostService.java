@@ -128,10 +128,10 @@ public class PostService {
     List<Order> orders = new ArrayList<>();
     if (order != null) {
 
-      orders.add(new Order(order.getAsc() ? Direction.ASC : Direction.DESC, order.getKey().name()));
+      orders.add(new Order(order.getAsc() ? Direction.ASC : Direction.DESC, order.getKey().getKey()));
     }
 
-    orders.add(new Order(Direction.DESC, SearchKey.ID.name()));
+    orders.add(new Order(Direction.DESC, SearchKey.ID.getKey()));
 
     if (search != null) {
       switch (search.getKey()) {

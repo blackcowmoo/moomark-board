@@ -37,7 +37,8 @@ public class PostController {
    * =================================== GET ===================================
    */
   @GetMapping("/api/v1/posts")
-  public List<Post> getPosts(@RequestParam Long offset, @RequestParam Integer limit) {
+  public List<Post> getPosts(@RequestParam(required = false) Long offset,
+      @RequestParam(required = false) Integer limit) {
     return postService.getPosts(offset, limit);
   }
 
