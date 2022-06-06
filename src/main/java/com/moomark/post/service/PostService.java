@@ -3,15 +3,22 @@ package com.moomark.post.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.moomark.post.domain.Post;
-import com.moomark.post.domain.PostCategory;
-import com.moomark.post.domain.PostDto;
-import com.moomark.post.domain.Category;
 import com.moomark.post.exception.ErrorCode;
 import com.moomark.post.exception.JpaException;
+import com.moomark.post.model.dto.PostDto;
+import com.moomark.post.model.entity.Category;
+import com.moomark.post.model.entity.Post;
+import com.moomark.post.model.entity.PostCategory;
+import com.moomark.post.model.option.SearchKey;
+import com.moomark.post.model.option.SearchOption;
+import com.moomark.post.model.option.SortOption;
 import com.moomark.post.repository.PostCategoryRepository;
 import com.moomark.post.repository.PostRepository;
 import com.moomark.post.repository.CategoryRepository;
@@ -27,12 +34,18 @@ public class PostService {
   private final CategoryRepository categoryRepository;
   private final PostCategoryRepository postCategoryRepository;
 
+  private final Integer MAX_LIMIT = 100; // Posts per page
+
   public Post savePost(PostDto postDto) {
     return savePost(postDto.getUserId(), postDto.getTitle(), postDto.getContent());
   }
 
   public Post savePost(String userId, String title, String content) {
     return postRepository.save(Post.builder().title(title).userId(userId).content(content).build());
+  }
+
+  public List<Post> getPosts(Long offset, Integer limit) {
+    return getPostsWithOptions(offset, limit, null, null);
   }
 
   public void deletePost(Long postId) throws JpaException {
@@ -101,4 +114,35 @@ public class PostService {
 
     return resultList;
   }
+
+  private List<Post> getPostsWithOptions(Long offset, Integer limit, SearchOption search, SortOption order) {
+    if (offset == null) {
+      offset = Long.MAX_VALUE;
+    }
+
+    if (limit == null || limit < 0 || limit > MAX_LIMIT) {
+      limit = MAX_LIMIT;
+    }
+
+    List<Order> orders = new ArrayList<>();
+    if (order != null) {
+
+      orders.add(new Order(order.getAsc() ? Direction.ASC : Direction.DESC, order.getKey().name()));
+    }
+
+    orders.add(new Order(Direction.DESC, SearchKey.ID.name()));
+
+    if (search != null) {
+      switch (search.getKey()) {
+        case USER_ID:
+          return postRepository.findByUserIdAndIdLessThan(
+              search.getValue(), offset, Pageable.ofSize(limit), Sort.by(orders));
+        default:
+          break;
+      }
+    }
+
+    return postRepository.findByIdLessThan(offset, Pageable.ofSize(limit), Sort.by(orders));
+  }
+
 }

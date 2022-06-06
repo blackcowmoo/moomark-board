@@ -3,8 +3,8 @@ package com.moomark.post.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.moomark.post.domain.Tag;
-import com.moomark.post.domain.TagDto;
+import com.moomark.post.model.dto.TagDto;
+import com.moomark.post.model.entity.Tag;
 import com.moomark.post.repository.TagRepository;
 
 import lombok.RequiredArgsConstructor;

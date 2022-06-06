@@ -1,10 +1,11 @@
 package com.moomark.post.service;
 
 import org.springframework.stereotype.Service;
-import com.moomark.post.domain.Category;
-import com.moomark.post.domain.CategoryDto;
+
 import com.moomark.post.exception.ErrorCode;
 import com.moomark.post.exception.JpaException;
+import com.moomark.post.model.dto.CategoryDto;
+import com.moomark.post.model.entity.Category;
 import com.moomark.post.repository.CategoryRepository;
 
 import lombok.RequiredArgsConstructor;

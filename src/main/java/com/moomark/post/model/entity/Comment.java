@@ -1,8 +1,10 @@
-package com.moomark.post.domain;
+package com.moomark.post.model.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -24,50 +26,45 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class Category {
+public class Comment {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  
-  @OneToMany(mappedBy = "category")
-  private List<PostCategory> post;
-  
-  private String categoryType;
-  
+
+  @OneToMany(mappedBy = "comment")
+  private List<PostComment> post;
+
+  @Column(name = "user_id")
+  private String userId;
+
+  @Column(name = "content")
+  private String content;
+
   @JoinColumn(name = "parent_id")
   @ManyToOne(fetch = FetchType.LAZY)
-  private Category parent;
-  
+  private Comment parent;
+
   @OneToMany(mappedBy = "parent")
-  private List<Category> childList;
-  
-  
+  private List<Comment> childList;
+
   @Builder
-  public Category(String type) {
-    this.categoryType = type;
-  }
-  
-  public void updateCategoryInfo(String categoryType) {
-    this.categoryType = categoryType;
-  }
-  
-  public void addChildCategory(Category childCategory) {
-    childCategory.setParents(this);
-    this.childList.add(childCategory);
+  public Comment(String userId, String content) {
+    this.userId = userId;
+    this.content = content;
   }
 
-  public void removeChildCategory(Category category) {
-    this.childList.remove(category);
-  }
-
-  public void setParents(Category parentCategory) {
-    this.parent = parentCategory;
-  }
-
-  public Long getParentAfterNullCheck() {
+  public Long getParentId() {
     return Optional.ofNullable(this.parent)
-        .map(Category::getId)
+        .map(Comment::getId)
         .orElse((long) 0);
+  }
+
+  public List<Long> getChildIdList() {
+    List<Long> result = new ArrayList<>();
+    for (Comment child : this.childList) {
+      result.add(child.getId());
+    }
+    return result;
   }
 }

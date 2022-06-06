@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.moomark.post.domain.PostDto;
-import com.moomark.post.domain.CommentDto;
-import com.moomark.post.domain.Post;
 import com.moomark.post.exception.JpaException;
+import com.moomark.post.model.dto.CommentDto;
+import com.moomark.post.model.dto.PostDto;
+import com.moomark.post.model.entity.Post;
 import com.moomark.post.service.PostService;
 import com.moomark.post.service.CommentService;
 
@@ -35,6 +36,11 @@ public class PostController {
   /*
    * =================================== GET ===================================
    */
+  @GetMapping("/api/v1/posts")
+  public List<Post> getPosts(@RequestParam Long offset, @RequestParam Integer limit) {
+    return postService.getPosts(offset, limit);
+  }
+
   @GetMapping("/post/{postId}/content")
   public ResponseEntity<PostDto> getPostInfoById(@PathVariable("postId") Long postId)
       throws JpaException {

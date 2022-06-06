@@ -1,4 +1,4 @@
-package com.moomark.post.domain;
+package com.moomark.post.model.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -20,24 +20,24 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class PostCategory {
+public class PostComment {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
 
   @JoinColumn(name = "post_id")
   @ManyToOne(fetch = FetchType.LAZY)
   private Post post;
 
-
-  @JoinColumn(name = "category_id")
+  @JoinColumn(name = "comment_id")
   @ManyToOne(fetch = FetchType.LAZY)
-  private Category category;
+  private Comment comment;
 
   @Builder
-  public PostCategory(Post post, Category category) {
+  public PostComment(Post post, Comment comment) {
     this.post = post;
-    this.category = category;
+    this.comment = comment;
   }
+
 }

@@ -6,8 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.moomark.post.domain.Post;
-import com.moomark.post.domain.PostComment;
+import com.moomark.post.model.entity.Post;
+import com.moomark.post.model.entity.PostComment;
 
 public interface PostCommentRepository extends JpaRepository<PostComment, Long> {
   List<PostComment> findByPost(Post post);

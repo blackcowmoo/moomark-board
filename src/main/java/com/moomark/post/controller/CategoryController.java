@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.moomark.post.domain.CategoryDto;
 import com.moomark.post.exception.JpaException;
+import com.moomark.post.model.dto.CategoryDto;
 import com.moomark.post.service.PostService;
 import com.moomark.post.service.CategoryService;
 
