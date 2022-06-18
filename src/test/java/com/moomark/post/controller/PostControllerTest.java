@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,7 +27,7 @@ public class PostControllerTest {
   @Autowired
   private ObjectMapper mapper;
 
-  @AfterAll
+  @BeforeAll
   public void getPostsCountBefore() throws Exception {
     long posts = mapper.readValue(mvc
         .perform(get("/api/v1/posts/count"))
