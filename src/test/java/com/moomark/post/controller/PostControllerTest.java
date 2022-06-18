@@ -29,9 +29,8 @@ public class PostControllerTest {
 
   @BeforeAll
   public void getPostsCountBefore() throws Exception {
-    long posts = mapper.readValue(mvc
-        .perform(get("/api/v1/posts/count"))
-        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), long.class);
+    long posts = Long.parseLong(mvc.perform(get("/api/v1/posts/count"))
+        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
 
     assertEquals(posts, 0);
   }
@@ -68,9 +67,8 @@ public class PostControllerTest {
 
   @AfterAll
   public void getPostsCountAfter() throws Exception {
-    long posts = mapper.readValue(mvc
-        .perform(get("/api/v1/posts/count"))
-        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), long.class);
+    long posts = Long.parseLong(mvc.perform(get("/api/v1/posts/count"))
+        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
 
     assertEquals(posts, 1);
   }
