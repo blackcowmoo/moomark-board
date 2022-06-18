@@ -154,12 +154,12 @@ public class PostService {
     if (search != null) {
       switch (search.getKey()) {
         case USER_ID:
-          return postRepository.findCountByUserId(search.getValue());
+          return postRepository.countByUserId(search.getValue());
         default:
           break;
       }
     }
 
-    return postRepository.findCount();
+    return postRepository.count();
   }
 }
