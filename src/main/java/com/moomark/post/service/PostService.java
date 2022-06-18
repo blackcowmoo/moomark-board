@@ -49,6 +49,10 @@ public class PostService {
     return getPostsWithOptions(offset, limit, null, null);
   }
 
+  public long getPostsCount() {
+    return getPostsCountWithOptions(null);
+  }
+
   public void deletePost(Long postId) throws JpaException {
     var post = postRepository.findById(postId)
         .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_POST.getMsg(),
@@ -146,4 +150,16 @@ public class PostService {
     return postRepository.findByIdLessThan(offset, PageRequest.of(0, limit, Sort.by(orders)));
   }
 
+  private long getPostsCountWithOptions(SearchOption search) {
+    if (search != null) {
+      switch (search.getKey()) {
+        case USER_ID:
+          return postRepository.countByUserId(search.getValue());
+        default:
+          break;
+      }
+    }
+
+    return postRepository.count();
+  }
 }

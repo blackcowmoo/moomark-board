@@ -5,7 +5,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +19,7 @@ import com.moomark.post.model.entity.Post;
 
 import net.minidev.json.JSONObject;
 
+@TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class PostControllerTest {
@@ -26,6 +30,16 @@ public class PostControllerTest {
   private ObjectMapper mapper;
 
   @Test
+  @Order(1)
+  public void getPostsCountBefore() throws Exception {
+    long posts = Long.parseLong(mvc.perform(get("/api/v1/posts/count"))
+        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+
+    assertEquals(posts, 0);
+  }
+
+  @Test
+  @Order(2)
   public void writePost() throws Exception {
     String testTitle = "testTitle";
     String testContent = "testContent";
@@ -47,6 +61,16 @@ public class PostControllerTest {
   }
 
   @Test
+  @Order(3)
+  public void getPostsCountAfter() throws Exception {
+    long posts = Long.parseLong(mvc.perform(get("/api/v1/posts/count"))
+        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+
+    assertEquals(posts, 1);
+  }
+
+  @Test
+  @Order(4)
   public void getPosts() throws Exception {
     Post[] post = mapper.readValue(mvc
         .perform(get("/api/v1/posts").queryParam("limit", "1"))
@@ -54,4 +78,5 @@ public class PostControllerTest {
 
     assertEquals(post.length, 1);
   }
+
 }
