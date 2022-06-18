@@ -54,4 +54,13 @@ public class PostControllerTest {
 
     assertEquals(post.length, 1);
   }
+
+  @Test
+  public void getPostsCount() throws Exception {
+    long posts = mapper.readValue(mvc
+        .perform(get("/api/v1/posts/count"))
+        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), long.class);
+
+    assertEquals(posts, 1);
+  }
 }
