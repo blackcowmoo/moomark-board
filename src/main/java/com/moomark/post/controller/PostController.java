@@ -41,6 +41,11 @@ public class PostController {
       @RequestParam(required = false) Integer limit) {
     return postService.getPosts(offset, limit);
   }
+  
+  @GetMapping("/api/v1/posts/count")
+  public long getPostsCount() {
+    return postService.getPostsCount();
+  }
 
   @GetMapping("/post/{postId}/content")
   public ResponseEntity<PostDto> getPostInfoById(@PathVariable("postId") Long postId)

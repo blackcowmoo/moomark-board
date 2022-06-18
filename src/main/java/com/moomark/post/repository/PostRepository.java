@@ -20,4 +20,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   public List<Post> findByIdLessThan(Long id, Pageable paging);
 
   public List<Post> findByUserIdAndIdLessThan(String userId, Long id, Pageable paging);
+
+  public long findCount();
+
+  public long findCountByUserId(String userId);
 }
