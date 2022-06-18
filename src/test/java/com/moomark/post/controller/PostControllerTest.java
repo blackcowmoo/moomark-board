@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -55,7 +56,7 @@ public class PostControllerTest {
     assertEquals(post.length, 1);
   }
 
-  @Test
+  @AfterAll
   public void getPostsCount() throws Exception {
     long posts = mapper.readValue(mvc
         .perform(get("/api/v1/posts/count"))
