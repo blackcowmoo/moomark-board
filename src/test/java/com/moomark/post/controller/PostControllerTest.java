@@ -27,7 +27,7 @@ public class PostControllerTest {
   private ObjectMapper mapper;
 
   @Test
-  @Order(0)
+  @Order(1)
   public void getPostsCountBefore() throws Exception {
     long posts = Long.parseLong(mvc.perform(get("/api/v1/posts/count"))
         .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
@@ -36,7 +36,7 @@ public class PostControllerTest {
   }
 
   @Test
-  @Order(1)
+  @Order(2)
   public void writePost() throws Exception {
     String testTitle = "testTitle";
     String testContent = "testContent";
@@ -58,7 +58,7 @@ public class PostControllerTest {
   }
 
   @Test
-  @Order(2)
+  @Order(3)
   public void getPostsCountAfter() throws Exception {
     long posts = Long.parseLong(mvc.perform(get("/api/v1/posts/count"))
         .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
@@ -67,6 +67,7 @@ public class PostControllerTest {
   }
 
   @Test
+  @Order(4)
   public void getPosts() throws Exception {
     Post[] post = mapper.readValue(mvc
         .perform(get("/api/v1/posts").queryParam("limit", "1"))
