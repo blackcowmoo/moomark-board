@@ -26,6 +26,15 @@ public class PostControllerTest {
   @Autowired
   private ObjectMapper mapper;
 
+  @AfterAll
+  public void getPostsCountBefore() throws Exception {
+    long posts = mapper.readValue(mvc
+        .perform(get("/api/v1/posts/count"))
+        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), long.class);
+
+    assertEquals(posts, 0);
+  }
+
   @Test
   public void writePost() throws Exception {
     String testTitle = "testTitle";
@@ -57,7 +66,7 @@ public class PostControllerTest {
   }
 
   @AfterAll
-  public void getPostsCount() throws Exception {
+  public void getPostsCountAfter() throws Exception {
     long posts = mapper.readValue(mvc
         .perform(get("/api/v1/posts/count"))
         .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), long.class);
