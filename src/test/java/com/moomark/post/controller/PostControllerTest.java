@@ -101,7 +101,7 @@ public class PostControllerTest {
     long postId = post.getId();
 
     Post resultPost = mapper.readValue(mvc
-        .perform(post("/api/v1/post/" + postId)
+        .perform(get("/api/v1/post/" + postId)
             .header("Content-Type", "application/json"))
         .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), Post.class);
 
