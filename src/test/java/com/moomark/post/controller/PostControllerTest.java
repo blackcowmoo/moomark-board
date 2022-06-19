@@ -79,4 +79,34 @@ public class PostControllerTest {
     assertEquals(post.length, 1);
   }
 
+  @Test
+  @Order(5)
+  public void getPost() throws Exception {
+    String testTitle = "testTitleInfo";
+    String testContent = "testContentInfo";
+
+    JSONObject requestParams = new JSONObject();
+    requestParams.put("title", testTitle);
+    requestParams.put("content", testContent);
+
+    Post post = mapper.readValue(mvc
+        .perform(post("/api/v1/post")
+            .header("Content-Type", "application/json").header("x-moom-user-id", "TEST@test")
+            .content(requestParams.toJSONString()))
+        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), Post.class);
+
+    assertEquals(post.getTitle(), testTitle);
+    assertEquals(post.getContent(), testContent);
+
+    long postId = post.getId();
+
+    Post resultPost = mapper.readValue(mvc
+        .perform(post("/api/v1/post/" + postId)
+            .header("Content-Type", "application/json"))
+        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), Post.class);
+
+    assertEquals(resultPost.getId(), postId);
+    assertEquals(resultPost.getTitle(), testTitle);
+    assertEquals(resultPost.getContent(), testContent);
+  }
 }

@@ -2,6 +2,7 @@ package com.moomark.post.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -51,6 +52,15 @@ public class PostService {
 
   public long getPostsCount() {
     return getPostsCountWithOptions(null);
+  }
+
+  public Post getPost(Long id) {
+    Optional<Post> post = postRepository.findById(id);
+    if (post.isEmpty()) {
+      return null;
+    }
+
+    return post.get();
   }
 
   public void deletePost(Long postId) throws JpaException {
