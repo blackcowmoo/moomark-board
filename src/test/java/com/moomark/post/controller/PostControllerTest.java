@@ -79,4 +79,34 @@ public class PostControllerTest {
     assertEquals(post.length, 1);
   }
 
+  @Test
+  @Order(6)
+  public void writePostEmptyTitle() throws Exception {
+    String testContent = "testContent";
+
+    JSONObject requestParams = new JSONObject();
+    requestParams.put("title", "");
+    requestParams.put("content", testContent);
+
+    mvc.perform(post("/api/v1/post")
+        .header("Content-Type", "application/json").header("x-moom-user-id", "TEST@test")
+        .content(requestParams.toJSONString()))
+        .andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+  }
+
+  @Test
+  @Order(5)
+  public void writePostEmptyContent() throws Exception {
+    String testTitle = "testTitle";
+
+    JSONObject requestParams = new JSONObject();
+    requestParams.put("title", testTitle);
+    requestParams.put("content", "");
+
+    mvc.perform(post("/api/v1/post")
+        .header("Content-Type", "application/json").header("x-moom-user-id", "TEST@test")
+        .content(requestParams.toJSONString()))
+        .andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+  }
+
 }
