@@ -79,6 +79,7 @@ public class PostControllerTest {
     assertEquals(post.length, 1);
   }
 
+  @Test
   @Order(5)
   public void getPost() throws Exception {
     String testTitle = "testTitleInfo";
