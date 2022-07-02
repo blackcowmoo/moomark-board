@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Repository
 public class PassportRepository {
-  @Value("${passport.auth-server-host}")
+  @Value("${passport.auth-server.public-key}")
   private String apiEndpoint;
 
   private String publicKeyString;

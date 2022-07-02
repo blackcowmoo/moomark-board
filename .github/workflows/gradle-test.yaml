@@ -23,6 +23,7 @@ jobs:
       MYSQL_USERNAME: moomark
       MYSQL_PASSWORD: 1q2w3e4r
       MYSQL_DATABASE: moomark-post
+      AUTH_SERVICE_HOST: ${{ secrets.AUTH_SERVICE_HOST }}
 
     services:
       redis:
