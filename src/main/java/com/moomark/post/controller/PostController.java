@@ -82,6 +82,11 @@ public class PostController {
     }
 
     String userId = userIdHeaders.get(0);
+    if (body.getTitle().equals("") || body.getContent().equals("")) {
+      response.setStatus(HttpStatus.BAD_REQUEST.value());
+      return null;
+    }
+
     return postService.savePost(userId, body.getTitle(), body.getContent());
   }
 
