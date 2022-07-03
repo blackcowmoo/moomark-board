@@ -96,7 +96,8 @@ public class PostControllerTest {
 
     Post post = mapper.readValue(mvc
         .perform(post("/api/v1/post")
-            .header("Content-Type", "application/json").header("x-moom-user-id", "TEST@test")
+            .header("Content-Type", "application/json")
+            .header("x-moom-passport", passportTestRepository.generatePassport())
             .content(requestParams.toJSONString()))
         .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), Post.class);
 
@@ -125,7 +126,8 @@ public class PostControllerTest {
     requestParams.put("content", testContent);
 
     mvc.perform(post("/api/v1/post")
-        .header("Content-Type", "application/json").header("x-moom-user-id", "TEST@test")
+        .header("Content-Type", "application/json")
+        .header("x-moom-passport", passportTestRepository.generatePassport())
         .content(requestParams.toJSONString()))
         .andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
   }
@@ -140,7 +142,8 @@ public class PostControllerTest {
     requestParams.put("content", "");
 
     mvc.perform(post("/api/v1/post")
-        .header("Content-Type", "application/json").header("x-moom-user-id", "TEST@test")
+        .header("Content-Type", "application/json")
+        .header("x-moom-passport", passportTestRepository.generatePassport())
         .content(requestParams.toJSONString()))
         .andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
   }
