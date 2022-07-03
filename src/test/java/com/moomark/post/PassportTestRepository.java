@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Repository
 public class PassportTestRepository {
@@ -46,10 +47,11 @@ public class PassportTestRepository {
   }
 
   public String loginUser() {
-    Map<String, String> params = new HashMap<String, String>();
-    params.put("code", "test-" + userId);
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(loginEndpoint)
+        .queryParam("code", "test-" + userId);
+
     Token tokens = restTemplate
-        .exchange(loginEndpoint, HttpMethod.GET, new HttpEntity<>(null, null), Token.class, params).getBody();
+        .exchange(builder.toUriString(), HttpMethod.GET, new HttpEntity<>(null, null), Token.class).getBody();
     return tokens.token;
   }
 
