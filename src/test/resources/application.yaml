@@ -1,0 +1,5 @@
+passport:
+  auth-server:
+    generate-passport: ${AUTH_SERVICE_HOST}/api/v1/passport
+    google-login: ${AUTH_SERVICE_HOST}/api/v1/oauth2/google
+    withdraw: ${AUTH_SERVICE_HOST}/api/v1/user
