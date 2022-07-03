@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 @Repository
-public class PassportUtil {
+public class PassportTestRepository {
   private class Token {
     public String token;
   }
