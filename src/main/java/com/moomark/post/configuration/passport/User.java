@@ -8,6 +8,6 @@ public class User {
   public String authProvider;
 
   public String getUserId() {
-    return authProvider + "-" + id;
+    return authProvider + "@" + id;
   }
 }
