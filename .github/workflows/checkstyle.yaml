@@ -25,7 +25,7 @@ jobs:
           key: java-${{ hashFiles('build.gradle') }}
 
       - name: Run all check
-        run: ./gradlew check -x compileJava -x compileTestJava --stacktrace
+        run: ./gradlew check -x compileJava -x checkstyleTest -x compileTestJava --stacktrace
 
       - name: Update artifact
         uses: actions/upload-artifact@v2

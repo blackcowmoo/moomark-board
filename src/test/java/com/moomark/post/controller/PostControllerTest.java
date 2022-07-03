@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moomark.post.PassportTestRepository;
 import com.moomark.post.model.entity.Post;
 
 import net.minidev.json.JSONObject;
@@ -28,6 +29,9 @@ public class PostControllerTest {
 
   @Autowired
   private ObjectMapper mapper;
+
+  @Autowired
+  private PassportTestRepository passportTestRepository;
 
   @Test
   @Order(1)
@@ -50,7 +54,8 @@ public class PostControllerTest {
 
     Post post = mapper.readValue(mvc
         .perform(post("/api/v1/post")
-            .header("Content-Type", "application/json").header("x-moom-user-id", "TEST@test")
+            .header("Content-Type", "application/json")
+            .header("x-moom-passport", passportTestRepository.generatePassport())
             .content(requestParams.toJSONString()))
         .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), Post.class);
 
@@ -91,7 +96,8 @@ public class PostControllerTest {
 
     Post post = mapper.readValue(mvc
         .perform(post("/api/v1/post")
-            .header("Content-Type", "application/json").header("x-moom-user-id", "TEST@test")
+            .header("Content-Type", "application/json")
+            .header("x-moom-passport", passportTestRepository.generatePassport())
             .content(requestParams.toJSONString()))
         .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), Post.class);
 
@@ -109,7 +115,7 @@ public class PostControllerTest {
     assertEquals(resultPost.getTitle(), testTitle);
     assertEquals(resultPost.getContent(), testContent);
   }
-  
+
   @Test
   @Order(6)
   public void writePostEmptyTitle() throws Exception {
@@ -120,7 +126,8 @@ public class PostControllerTest {
     requestParams.put("content", testContent);
 
     mvc.perform(post("/api/v1/post")
-        .header("Content-Type", "application/json").header("x-moom-user-id", "TEST@test")
+        .header("Content-Type", "application/json")
+        .header("x-moom-passport", passportTestRepository.generatePassport())
         .content(requestParams.toJSONString()))
         .andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
   }
@@ -135,7 +142,8 @@ public class PostControllerTest {
     requestParams.put("content", "");
 
     mvc.perform(post("/api/v1/post")
-        .header("Content-Type", "application/json").header("x-moom-user-id", "TEST@test")
+        .header("Content-Type", "application/json")
+        .header("x-moom-passport", passportTestRepository.generatePassport())
         .content(requestParams.toJSONString()))
         .andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
   }
