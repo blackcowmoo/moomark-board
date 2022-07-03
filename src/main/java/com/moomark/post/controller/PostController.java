@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.moomark.post.configuration.passport.User;
 import com.moomark.post.exception.JpaException;
 import com.moomark.post.model.dto.CommentDto;
 import com.moomark.post.model.dto.PostDto;
@@ -32,6 +34,10 @@ public class PostController {
 
   private final PostService postService;
   private final CommentService commentService;
+
+  private User getUser() {
+    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  }
 
   /*
    * =================================== GET ===================================
@@ -75,13 +81,13 @@ public class PostController {
   @PostMapping("/api/v1/post")
   public Post writePost(@RequestHeader HttpHeaders headers, HttpServletResponse response,
       @RequestBody(required = true) PostDto body) {
-    List<String> userIdHeaders = headers.get("x-moom-user-id");
-    if (userIdHeaders.size() != 1) {
+    User user = getUser();
+    if (user == null) {
       response.setStatus(HttpStatus.UNAUTHORIZED.value());
       return null;
     }
 
-    String userId = userIdHeaders.get(0);
+    String userId = user.getUserId();
     if (body.getTitle().equals("") || body.getContent().equals("")) {
       response.setStatus(HttpStatus.BAD_REQUEST.value());
       return null;
