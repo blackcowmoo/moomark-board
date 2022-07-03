@@ -17,12 +17,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Repository
 public class PassportTestRepository {
-  private class Token {
+  private static class Token {
     public String token;
-
-    public Token(String token) {
-      this.token = token;
-    }
   }
 
   @Value("${passport.auth-server.google-login}")
