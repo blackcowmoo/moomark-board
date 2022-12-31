@@ -56,11 +56,8 @@ public class PostService {
 
   public Post getPost(Long id) {
     Optional<Post> post = postRepository.findById(id);
-    if (post.isEmpty()) {
-      return null;
-    }
+    return post.orElse(null);
 
-    return post.get();
   }
 
   public void deletePost(Long postId) throws JpaException {
