@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.moomark.post.model.entity.Post;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-  public List<Post> findByTitle(String title);
+  public List<Post> findByTitleContaining(String title);
 
   public List<Post> findByUserId(String userId);
 

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
@@ -78,7 +77,7 @@ public class PostService {
   }
 
   public List<PostDto> getPostInfoByTitle(String title) {
-    var postList = postRepository.findByTitle(title);
+    var postList = postRepository.findByTitleContaining(title);
     List<PostDto> postDtoList = new ArrayList<>();
     for (Post post : postList) {
       var postDto = PostDto.builder().id(post.getId()).title(post.getTitle()).userId(post.getUserId())
