@@ -44,4 +44,34 @@ class PostRepositoryTest {
     List<Post> savedList = postRepository.findByTitleContaining("TITLE");
     Assertions.assertThat(savedList).hasSize(2);
   }
+
+  @Test
+  void findByUserId() {
+
+    //given
+    Post firstSavedData = Post.builder()
+        .title("FIRST TITLE")
+        .content("FIRST CONTENT")
+        .userId("FIRST USER ID")
+        .build();
+    Post secondSavedData = Post.builder()
+        .title("SECOND TITLE")
+        .content("SECOND CONTENT")
+        .userId("SECOND USER ID")
+        .build();
+    Post thirdSavedData = Post.builder()
+        .title("THIRD TITLE")
+        .content("THIRD CONTENT")
+        .userId("FIRST USER ID")
+        .build();
+
+    //when
+    postRepository.save(firstSavedData);
+    postRepository.save(secondSavedData);
+    postRepository.save(thirdSavedData);
+
+    //then
+    List<Post> savedList = postRepository.findByUserId("FIRST USER ID");
+    Assertions.assertThat(savedList).hasSize(2);
+  }
 }
