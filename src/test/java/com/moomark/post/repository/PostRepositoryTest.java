@@ -1,10 +1,10 @@
 package com.moomark.post.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.moomark.post.model.entity.Post;
 import java.util.List;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,11 @@ class PostRepositoryTest {
 
   @Autowired
   private PostRepository postRepository;
+
+  @BeforeEach
+  void refreshDataBase() {
+    postRepository.deleteAll();
+  }
 
   @Test
   void findByTitle() {
