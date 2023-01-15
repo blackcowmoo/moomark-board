@@ -126,6 +126,20 @@ public class PostService {
     return resultList;
   }
 
+  public void updatePost(PostDto postDto) throws JpaException {
+    updatePost(postDto.getId(), postDto.getTitle(), postDto.getContent());
+  }
+
+  public void updatePost(Long postId, String title, String content) throws JpaException {
+    Post savedPost = postRepository.findById(postId).orElseThrow(
+        () -> new JpaException(
+            ErrorCode.CANNOT_FIND_POST.getMsg(),
+            ErrorCode.CANNOT_FIND_POST.getCode())
+    );
+
+    savedPost.updateInformation(title, content);
+  }
+
   private List<Post> getPostsWithOptions(Long offset, Integer limit, SearchOption search, SortOption order) {
     if (offset == null) {
       offset = Long.MAX_VALUE;
