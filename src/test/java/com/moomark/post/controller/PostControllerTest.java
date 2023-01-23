@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import com.moomark.post.configuration.passport.PassportResponse;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -52,10 +53,13 @@ public class PostControllerTest {
     requestParams.put("title", testTitle);
     requestParams.put("content", testContent);
 
+    PassportResponse passport = passportTestRepository.generatePassport();
+
     Post post = mapper.readValue(mvc
         .perform(post("/api/v1/post")
             .header("Content-Type", "application/json")
-            .header("x-moom-passport", passportTestRepository.generatePassport())
+            .header("x-moom-passport-user", passport.getPassport())
+            .header("x-moom-passport-key", passport.getKey())
             .content(requestParams.toJSONString()))
         .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), Post.class);
 
@@ -93,11 +97,13 @@ public class PostControllerTest {
     JSONObject requestParams = new JSONObject();
     requestParams.put("title", testTitle);
     requestParams.put("content", testContent);
+    PassportResponse passport = passportTestRepository.generatePassport();
 
     Post post = mapper.readValue(mvc
         .perform(post("/api/v1/post")
             .header("Content-Type", "application/json")
-            .header("x-moom-passport", passportTestRepository.generatePassport())
+            .header("x-moom-passport-user", passport.getPassport())
+            .header("x-moom-passport-key", passport.getKey())
             .content(requestParams.toJSONString()))
         .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), Post.class);
 
@@ -124,10 +130,12 @@ public class PostControllerTest {
     JSONObject requestParams = new JSONObject();
     requestParams.put("title", "");
     requestParams.put("content", testContent);
+    PassportResponse passport = passportTestRepository.generatePassport();
 
     mvc.perform(post("/api/v1/post")
         .header("Content-Type", "application/json")
-        .header("x-moom-passport", passportTestRepository.generatePassport())
+        .header("x-moom-passport-user", passport.getPassport())
+        .header("x-moom-passport-key", passport.getKey())
         .content(requestParams.toJSONString()))
         .andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
   }
@@ -140,10 +148,12 @@ public class PostControllerTest {
     JSONObject requestParams = new JSONObject();
     requestParams.put("title", testTitle);
     requestParams.put("content", "");
+    PassportResponse passport = passportTestRepository.generatePassport();
 
     mvc.perform(post("/api/v1/post")
         .header("Content-Type", "application/json")
-        .header("x-moom-passport", passportTestRepository.generatePassport())
+        .header("x-moom-passport-user", passport.getPassport())
+        .header("x-moom-passport-key", passport.getKey())
         .content(requestParams.toJSONString()))
         .andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
   }

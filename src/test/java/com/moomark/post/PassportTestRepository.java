@@ -6,6 +6,9 @@ import java.util.Random;
 
 import javax.annotation.PostConstruct;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moomark.post.configuration.passport.Passport;
+import com.moomark.post.configuration.passport.PassportResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -33,6 +36,9 @@ public class PassportTestRepository {
   @Autowired
   private RestTemplate restTemplate;
 
+  @Autowired
+  private ObjectMapper mapper;
+
   private String userId = null;
 
   @PostConstruct
@@ -55,17 +61,26 @@ public class PassportTestRepository {
     return tokens.token;
   }
 
-  public String generatePassport() {
+  public PassportResponse generatePassport() {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", loginUser());
-
-    return restTemplate.exchange(generatePassportEndpoint, HttpMethod.GET, new HttpEntity<>(headers), String.class)
-        .getBody();
+    try {
+      return mapper.readValue(
+          restTemplate.exchange(
+              generatePassportEndpoint, HttpMethod.GET, new HttpEntity<>(headers), String.class
+          ).getBody(),
+          PassportResponse.class
+      );
+    } catch (Exception e) {
+      return null;
+    }
   }
 
   private void withdrawUser() {
     HttpHeaders headers = new HttpHeaders();
-    headers.set("x-moom-passport", generatePassport());
+    PassportResponse passport = generatePassport();
+    headers.set("x-moom-passport-user", passport.getPassport());
+    headers.set("x-moom-passport-key", passport.getKey());
 
     restTemplate.exchange(withdrawEndpoint, HttpMethod.DELETE, new HttpEntity<>(headers), void.class);
   }
