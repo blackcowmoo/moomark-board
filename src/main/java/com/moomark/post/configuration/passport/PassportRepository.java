@@ -7,6 +7,7 @@ import java.util.Base64;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +41,7 @@ public class PassportRepository {
     publicKey = keyFactory.generatePublic(ukeySpec);
   }
 
-  public String decryptByPublicKey(byte[] data) {
+  public String rsaDecryptByPublicKey(byte[] data) {
     try {
       cipher.init(Cipher.DECRYPT_MODE, publicKey);
       return new String(cipher.doFinal(data));
@@ -48,5 +49,12 @@ public class PassportRepository {
       log.error("decryptByPublicKey: ", e);
       return null;
     }
+  }
+
+  public String aesDecrypt(byte[] body, SecretKey key) throws Exception {
+    Cipher cipher = Cipher.getInstance("AES");
+    cipher.init(Cipher.DECRYPT_MODE, key);
+    byte[] decrypted = cipher.doFinal(body);
+    return new String(decrypted);
   }
 }
