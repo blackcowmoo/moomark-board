@@ -132,11 +132,8 @@ public class PostService {
   }
 
   public PostDto updatePost(Long postId, String title, String content) throws JpaException {
-    Post savedPost = postRepository.findById(postId).orElseThrow(
-        () -> new JpaException(
-            ErrorCode.CANNOT_FIND_POST.getMsg(),
-            ErrorCode.CANNOT_FIND_POST.getCode())
-    );
+    Post savedPost = postRepository.findById(postId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_POST.getMsg(), ErrorCode.CANNOT_FIND_POST.getCode()));
 
     savedPost.updateInformation(title, content);
 
