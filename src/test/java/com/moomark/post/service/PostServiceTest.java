@@ -1,7 +1,5 @@
 package com.moomark.post.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import com.moomark.post.exception.JpaException;
@@ -52,7 +50,7 @@ class PostServiceTest {
     given(postRepository.findById(1L)).willReturn(Optional.of(savedPost));
 
     //when
-    Post updatePost = postService.updatePost(updateDto);
+    PostDto updatePost = postService.updatePost(updateDto);
 
     //then
     Assertions.assertThat(updatePost.getTitle()).isEqualTo(updateDto.getTitle());
