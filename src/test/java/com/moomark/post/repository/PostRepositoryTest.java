@@ -22,11 +22,6 @@ class PostRepositoryTest {
   @Autowired
   private PostRepository postRepository;
 
-  @BeforeEach
-  void initTest() {
-    postRepository.deleteAll();
-  }
-
   @Test
   void findByTitle() {
     // given
