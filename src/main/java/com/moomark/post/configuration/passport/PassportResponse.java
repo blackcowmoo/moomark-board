@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class PassportResponse {
-  public Timestamp exp; // expired timestamp
-  public User user;
+  private String key;
+  private String passport;
 }

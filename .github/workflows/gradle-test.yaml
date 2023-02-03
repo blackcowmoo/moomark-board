@@ -13,7 +13,7 @@ jobs:
     name: Build and Test
     runs-on: ubuntu-latest
     env:
-      MIN_TEST_COVERAGE: 15
+      MIN_TEST_COVERAGE: 17
       ENVIRONMENT: dev
       REDIS_CLUSTER_HOST: localhost
       REDIS_PORT: 6379
