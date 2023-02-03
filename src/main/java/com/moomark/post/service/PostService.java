@@ -1,5 +1,6 @@
 package com.moomark.post.service;
 
+import com.moomark.post.model.dto.CategoryDto;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -124,6 +125,19 @@ public class PostService {
     }
 
     return resultList;
+  }
+
+  public PostDto updatePost(PostDto postDto) throws JpaException {
+    return updatePost(postDto.getId(), postDto.getTitle(), postDto.getContent());
+  }
+
+  public PostDto updatePost(Long postId, String title, String content) throws JpaException {
+    Post savedPost = postRepository.findById(postId)
+        .orElseThrow(() -> new JpaException(ErrorCode.CANNOT_FIND_POST.getMsg(), ErrorCode.CANNOT_FIND_POST.getCode()));
+
+    savedPost.updateInformation(title, content);
+
+    return PostDto.toDto(savedPost);
   }
 
   private List<Post> getPostsWithOptions(Long offset, Integer limit, SearchOption search, SortOption order) {
