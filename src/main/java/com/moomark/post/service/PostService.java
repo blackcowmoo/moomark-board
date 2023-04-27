@@ -117,10 +117,7 @@ public class PostService {
     List<PostCategory> getPostList = postCategoryRepository.findByCategory(category);
     List<PostDto> resultList = new ArrayList<>();
     for (PostCategory post : getPostList) {
-      resultList.add(PostDto.builder().id(post.getPost().getId())
-          .title(post.getPost().getTitle()).userId(post.getPost().getUserId())
-          .recommendCount(post.getPost().getRecommendCount())
-          .viewsCount(post.getPost().getViewsCount()).build());
+      resultList.add(post.toPostDto());
     }
 
     return resultList;

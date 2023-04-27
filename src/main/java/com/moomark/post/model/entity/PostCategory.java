@@ -1,5 +1,6 @@
 package com.moomark.post.model.entity;
 
+import com.moomark.post.model.dto.PostDto;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -21,6 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class PostCategory {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -37,5 +39,15 @@ public class PostCategory {
   public PostCategory(Post post, Category category) {
     this.post = post;
     this.category = category;
+  }
+
+  public PostDto toPostDto() {
+    return PostDto.builder()
+        .id(this.post.getId())
+        .title(this.post.getTitle())
+        .userId(this.post.getUserId())
+        .recommendCount(this.post.getRecommendCount())
+        .viewsCount(this.post.getViewsCount())
+        .build();
   }
 }
